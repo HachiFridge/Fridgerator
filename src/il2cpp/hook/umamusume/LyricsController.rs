@@ -3,7 +3,7 @@ use std::path::Path;
 use fnv::FnvHashMap;
 
 use crate::{
-    core::{ext::Utf16StringExt, Hachimi, game::Region},
+    core::{ext::Utf16StringExt, Fridgerator, game::Region},
     il2cpp::{
         ext::{Il2CppStringExt, StringExt},
         symbols::{get_field_from_name, get_field_object_value, get_method_addr, Array, Dictionary},
@@ -68,7 +68,7 @@ extern "C" fn LoadLyrics(this: *mut Il2CppObject, id: i32, path: *mut Il2CppStri
 
     let mut dict_path = Path::new("lyrics").join(path_str.path_filename().to_string());
     dict_path.set_extension("json");
-    let localized_data = Hachimi::instance().localized_data.load();
+    let localized_data = Fridgerator::instance().localized_data.load();
     let Some(dict): Option<FnvHashMap<i32, String>> = localized_data.load_assets_dict(Some(&dict_path)) else {
         return true;
     };
@@ -101,7 +101,7 @@ extern "C" fn LoadLyrics(this: *mut Il2CppObject, id: i32, path: *mut Il2CppStri
 
         let data_ptr = (raw_array as *mut u8).add(kIl2CppSizeOfArray);
 
-        match Hachimi::instance().game.region {
+        match Fridgerator::instance().game.region {
             Region::Japan => {
                 if element_size != std::mem::size_of::<LyricsDataJP>() {
                     return true;

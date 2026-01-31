@@ -8,7 +8,7 @@ use size::Size;
 use thread_priority::{ThreadBuilderExt, ThreadPriority};
 
 use crate::core::game::Region;
-use super::{gui::SimpleYesNoDialog, hachimi::LocalizedData, http::{self, AsyncRequest}, utils, Error, Gui, Hachimi};
+use super::{gui::SimpleYesNoDialog, fridgerator::LocalizedData, http::{self, AsyncRequest}, utils, Error, Gui, Fridgerator};
 use once_cell::sync::Lazy;
 
 #[derive(Deserialize)]
@@ -38,7 +38,7 @@ impl RepoInfo {
 }
 
 pub fn new_meta_index_request() -> AsyncRequest<Vec<RepoInfo>> {
-    let meta_index_url = &Hachimi::instance().config.load().meta_index_url;
+    let meta_index_url = &Fridgerator::instance().config.load().meta_index_url;
     AsyncRequest::with_json_response(ureq::get(meta_index_url))
 }
 
@@ -202,12 +202,12 @@ impl Updater {
             return Ok(());
         };
 
-        let hachimi = Hachimi::instance();
-        let config = hachimi.config.load();
+        let fridgerator = Fridgerator::instance();
+        let config = fridgerator.config.load();
         let Some(index_url) = &config.translation_repo_index else {
             return Ok(());
         };
-        let ld_dir_path = config.localized_data_dir.as_ref().map(|p| hachimi.get_data_path(p));
+        let ld_dir_path = config.localized_data_dir.as_ref().map(|p| fridgerator.get_data_path(p));
 
         if let Some(mutex) = Gui::instance() {
             mutex.lock().unwrap().show_notification(&t!("notification.checking_for_tl_updates"));
@@ -215,7 +215,7 @@ impl Updater {
 
         let index: RepoIndex = http::get_json(index_url)?;
 
-        let cache_path = hachimi.get_data_path(REPO_CACHE_FILENAME);
+        let cache_path = fridgerator.get_data_path(REPO_CACHE_FILENAME);
         let repo_cache = if fs::metadata(&cache_path).is_ok() {
             let json = fs::read_to_string(&cache_path)?;
             serde_json::from_str(&json)?
@@ -224,7 +224,7 @@ impl Updater {
             RepoCache::default()
         };
 
-        let excludes_path = hachimi.get_data_path(REPO_EXCLUDES_FILENAME);
+        let excludes_path = fridgerator.get_data_path(REPO_EXCLUDES_FILENAME);
         let excludes: HashSet<String> = if excludes_path.exists() {
             fs::read_to_string(&excludes_path)
                 .unwrap_or_default()
@@ -351,7 +351,7 @@ impl Updater {
                     &dialog_message,
                     |ok| {
                         if !ok { return; }
-                        Hachimi::instance().tl_updater.clone().run();
+                        Fridgerator::instance().tl_updater.clone().run();
                     }
                 )));
             }
@@ -387,11 +387,11 @@ impl Updater {
         }
 
         // Empty the localized data so files couldnt be accessed while update is in progress
-        let hachimi = Hachimi::instance();
-        hachimi.localized_data.store(Arc::new(LocalizedData::default()));
+        let fridgerator = Fridgerator::instance();
+        fridgerator.localized_data.store(Arc::new(LocalizedData::default()));
 
         // Clear the localized data if downloading from a new repo
-        let localized_data_dir = hachimi.get_data_path(LOCALIZED_DATA_DIR);
+        let localized_data_dir = fridgerator.get_data_path(LOCALIZED_DATA_DIR);
         if update_info.is_new_repo {
             // rm -rf
             if let Ok(meta) = fs::metadata(&localized_data_dir) {
@@ -413,24 +413,24 @@ impl Updater {
         }?;
         
         // Modify the config if needed
-        if hachimi.config.load().localized_data_dir.is_none() {
-            let mut config = (**hachimi.config.load()).clone();
+        if fridgerator.config.load().localized_data_dir.is_none() {
+            let mut config = (**fridgerator.config.load()).clone();
             config.localized_data_dir = Some(LOCALIZED_DATA_DIR.to_owned());
-            hachimi.save_and_reload_config(config)?;
+            fridgerator.save_and_reload_config(config)?;
         }
 
         // Drop the download state
         self.progress.store(Arc::new(None));
 
         // Reload the localized data
-        hachimi.load_localized_data();
+        fridgerator.load_localized_data();
 
         // Save the repo cache (done last so if any of the previous fails, the entire update would be voided)
         let repo_cache = RepoCache {
             base_url: update_info.base_url.clone(),
             files: cached_files.lock().unwrap().clone()
         };
-        let cache_path = hachimi.get_data_path(REPO_CACHE_FILENAME);
+        let cache_path = fridgerator.get_data_path(REPO_CACHE_FILENAME);
         utils::write_json_file(&repo_cache, &cache_path)?;
 
         if let Some(mutex) = Gui::instance() {

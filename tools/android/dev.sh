@@ -38,14 +38,14 @@ echo "-- Building"
 ./tools/android/build.sh
 
 echo "-- Uploading"
-adb push ./build/aarch64-linux-android/$BUILD_TYPE/libhachimi.so /sdcard/libmain.so
+adb push ./build/aarch64-linux-android/$BUILD_TYPE/libfridgerator.so /sdcard/libmain.so
 
 echo "-- Installing"
 adb shell am force-stop "$PACKAGE_NAME"
-adb shell "PACKAGE_NAME=$PACKAGE_NAME" su < "$(dirname "$0")/hachimi.sh"
+adb shell "PACKAGE_NAME=$PACKAGE_NAME" su < "$(dirname "$0")/fridgerator.sh"
 
 echo "-- Launching"
 adb shell am start-activity "$PACKAGE_NAME/$ACTIVITY_NAME"
 
 echo "-- Logcat"
-adb logcat |& grep --line-buffered Hachimi
+adb logcat |& grep --line-buffered Fridgerator

@@ -4,7 +4,7 @@ use fnv::FnvHasher;
 use once_cell::sync::Lazy;
 use widestring::{Utf16Str, Utf16String};
 
-use crate::core::hachimi::LocalizedData;
+use crate::core::fridgerator::LocalizedData;
 
 use super::{
     api::il2cpp_string_new_utf16,

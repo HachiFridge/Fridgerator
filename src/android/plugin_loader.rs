@@ -5,12 +5,12 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use crate::core::{plugin_api::Plugin, Hachimi};
+use crate::core::{plugin_api::Plugin, Fridgerator};
 
 pub fn load_libraries() -> Vec<Plugin> {
     let mut plugins = Vec::new();
     let mut loaded = HashSet::new();
-    let config = Hachimi::instance().config.load();
+    let config = Fridgerator::instance().config.load();
     let names = &config.android.load_libraries;
 
     if names.is_empty() {
@@ -65,9 +65,9 @@ fn try_load_library(name_or_path: &str) -> Option<Plugin> {
         return None;
     }
 
-    let init_addr = unsafe { libc::dlsym(handle, c"hachimi_init".as_ptr()) };
+    let init_addr = unsafe { libc::dlsym(handle, c"fridgerator_init".as_ptr()) };
     if init_addr.is_null() {
-        warn!("Library loaded but missing hachimi_init: {}", name_or_path);
+        warn!("Library loaded but missing fridgerator_init: {}", name_or_path);
         unsafe {
             libc::dlclose(handle);
         }
@@ -94,7 +94,7 @@ fn find_native_lib_dir() -> Option<PathBuf> {
     None
 }
 
-const AUTOSCAN_PREFIX: &str = "libhachimi_";
+const AUTOSCAN_PREFIX: &str = "libfridgerator_";
 
 fn collect_candidate_libs(lib_dir: &Path) -> Vec<PathBuf> {
     let mut libs = Vec::new();

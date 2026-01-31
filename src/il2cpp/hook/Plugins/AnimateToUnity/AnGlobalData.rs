@@ -1,8 +1,8 @@
-use crate::{core::Hachimi, il2cpp::{ext::LocalizedDataExt, symbols::get_method_addr, types::*}};
+use crate::{core::Fridgerator, il2cpp::{ext::LocalizedDataExt, symbols::get_method_addr, types::*}};
 
 type GetFontFn = extern "C" fn(this: *mut Il2CppObject, font_name: *mut Il2CppString) -> *mut Il2CppObject;
 extern "C" fn _GetFont(this: *mut Il2CppObject, font_name: *mut Il2CppString) -> *mut Il2CppObject {
-    let font = Hachimi::instance().localized_data.load().load_replacement_font();
+    let font = Fridgerator::instance().localized_data.load().load_replacement_font();
     if !font.is_null() {
         return font;
     }
@@ -11,7 +11,7 @@ extern "C" fn _GetFont(this: *mut Il2CppObject, font_name: *mut Il2CppString) ->
 
 type GetFontFromCommonFn = extern "C" fn(this: *mut Il2CppObject, font_name: *mut Il2CppString)  -> *mut Il2CppObject;
 extern "C" fn _GetFontFromCommon(this: *mut Il2CppObject, font_name: *mut Il2CppString) -> *mut Il2CppObject {
-    let font = Hachimi::instance().localized_data.load().load_replacement_font();
+    let font = Fridgerator::instance().localized_data.load().load_replacement_font();
     if !font.is_null() {
         return font;
     }

@@ -7,7 +7,7 @@ use std::sync::Arc;
 use glow::HasContext;
 use once_cell::unsync::OnceCell;
 
-use crate::core::{Error, Gui, Hachimi};
+use crate::core::{Error, Gui, Fridgerator};
 
 type EGLBoolean = c_uint;
 type EGLDisplay = *mut c_void;
@@ -47,7 +47,7 @@ extern "C" fn eglSwapBuffers(display: EGLDisplay, surface: EGLSurface) -> EGLBoo
             info!("Unhooking eglSwapBuffers");
 
             let res = orig_fn(display, surface);
-            Hachimi::instance().interceptor.unhook(eglSwapBuffers as usize);
+            Fridgerator::instance().interceptor.unhook(eglSwapBuffers as usize);
             return res;
         }
     };
@@ -146,7 +146,7 @@ fn init_internal() -> Result<(), Error> {
     let eglSwapBuffers_addr = unsafe { libc::dlsym(egl_handle, c"eglSwapBuffers".as_ptr()) };
 
     unsafe {
-        EGLSWAPBUFFERS_ADDR = Hachimi::instance().interceptor.hook(eglSwapBuffers_addr as usize, eglSwapBuffers as usize)?;
+        EGLSWAPBUFFERS_ADDR = Fridgerator::instance().interceptor.hook(eglSwapBuffers_addr as usize, eglSwapBuffers as usize)?;
         EGLGETPROCADDRESS_ADDR = libc::dlsym(egl_handle, c"eglGetProcAddress".as_ptr()) as usize;
         EGLQUERYSURFACE_ADDR = libc::dlsym(egl_handle, c"eglQuerySurface".as_ptr()) as usize
     }

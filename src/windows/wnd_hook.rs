@@ -9,7 +9,7 @@ use windows::{core::w, Win32::{
     }
 }};
 
-use crate::{core::{game::Region, Gui, Hachimi}, il2cpp::{hook::{UnityEngine_CoreModule}, symbols::Thread}, windows::utils};
+use crate::{core::{game::Region, Gui, Fridgerator}, il2cpp::{hook::{UnityEngine_CoreModule}, symbols::Thread}, windows::utils};
 use rust_i18n::t;
 
 use super::{gui_impl::input, discord};
@@ -37,12 +37,12 @@ extern "system" fn wnd_proc(hwnd: HWND, umsg: c_uint, wparam: WPARAM, lparam: LP
         WM_KEYDOWN | WM_SYSKEYDOWN => {
             if MENU_KEY_CAPTURE.load(atomic::Ordering::Relaxed) {
                 MENU_KEY_CAPTURE.store(false, atomic::Ordering::Relaxed);
-                let hachimi = Hachimi::instance();
-                let mut new_config = hachimi.config.load().as_ref().clone();
+                let fridgerator = Fridgerator::instance();
+                let mut new_config = fridgerator.config.load().as_ref().clone();
                 new_config.windows.menu_open_key = wparam.0 as u16;
-                let _ = hachimi.save_config(&new_config);
-                hachimi.config.store(Arc::new(new_config));
-                let key_label = crate::windows::utils::vk_to_display_label(Hachimi::instance().config.load().windows.menu_open_key);
+                let _ = fridgerator.save_config(&new_config);
+                fridgerator.config.store(Arc::new(new_config));
+                let key_label = crate::windows::utils::vk_to_display_label(Fridgerator::instance().config.load().windows.menu_open_key);
                 let msg = t!("notification.menu_open_key_set", key = key_label);
                 std::thread::spawn(move || {
                     if let Some(gui) = Gui::instance() {
@@ -51,19 +51,19 @@ extern "system" fn wnd_proc(hwnd: HWND, umsg: c_uint, wparam: WPARAM, lparam: LP
                 });
                 return LRESULT(0);
             }
-            if wparam.0 as u16 == Hachimi::instance().config.load().windows.menu_open_key {
+            if wparam.0 as u16 == Fridgerator::instance().config.load().windows.menu_open_key {
                 let Some(mut gui) = Gui::instance().map(|m| m.lock().unwrap()) else {
                     return unsafe { orig_fn(hwnd, umsg, wparam, lparam) };
                 };
 
                 gui.toggle_menu();
                 return LRESULT(0);
-            }else if wparam.0 as u16 == Hachimi::instance().config.load().windows.hide_ingame_ui_hotkey_bind {
+            }else if wparam.0 as u16 == Fridgerator::instance().config.load().windows.hide_ingame_ui_hotkey_bind {
                 Thread::main_thread().schedule(Gui::toggle_game_ui);
             }
         },
         WM_CLOSE => {
-            if let Some(hook) = Hachimi::instance().interceptor.unhook(wnd_proc as *const () as _) {
+            if let Some(hook) = Fridgerator::instance().interceptor.unhook(wnd_proc as *const () as _) {
                 unsafe { WNDPROC_RECALL = hook.orig_addr; }
                 Thread::main_thread().schedule(|| {
                     unsafe {
@@ -106,7 +106,7 @@ static mut HCBTHOOK: HHOOK = HHOOK(ptr::null_mut());
 extern "system" fn cbt_proc(ncode: i32, wparam: WPARAM, lparam: LPARAM) -> LRESULT {
     if ncode == HCBT_MINMAX as i32 &&
         lparam.0 as i32 != SW_RESTORE.0 &&
-        Hachimi::instance().config.load().windows.block_minimize_in_full_screen &&
+        Fridgerator::instance().config.load().windows.block_minimize_in_full_screen &&
         UnityEngine_CoreModule::Screen::get_fullScreen()
     {
         return LRESULT(1);
@@ -117,8 +117,8 @@ extern "system" fn cbt_proc(ncode: i32, wparam: WPARAM, lparam: LPARAM) -> LRESU
 
 pub fn init() {
     unsafe {
-        let hachimi = Hachimi::instance();
-        let game = &hachimi.game;
+        let fridgerator = Fridgerator::instance();
+        let game = &fridgerator.game;
 
         let window_name = if game.region == Region::Japan && game.is_steam_release {
             // lmao
@@ -138,7 +138,7 @@ pub fn init() {
 
         info!("Hooking WndProc");
         let wnd_proc_addr = GetWindowLongPtrW(hwnd, GWLP_WNDPROC);
-        match hachimi.interceptor.hook(wnd_proc_addr as _, wnd_proc as *const () as _) {
+        match fridgerator.interceptor.hook(wnd_proc_addr as _, wnd_proc as *const () as _) {
             Ok(trampoline_addr) => WNDPROC_ORIG = trampoline_addr as _,
             Err(e) => error!("Failed to hook WndProc: {}", e)
         }
@@ -149,11 +149,11 @@ pub fn init() {
         }
 
         // Apply always on top
-        if hachimi.window_always_on_top.load(atomic::Ordering::Relaxed) {
+        if fridgerator.window_always_on_top.load(atomic::Ordering::Relaxed) {
             _ = utils::set_window_topmost(hwnd, true);
         }
 
-        if hachimi.discord_rpc.load(atomic::Ordering::Relaxed) {
+        if fridgerator.discord_rpc.load(atomic::Ordering::Relaxed) {
             if let Err(e) = discord::start_rpc() {
                  error!("{}", e);
              }

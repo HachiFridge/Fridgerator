@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use widestring::Utf16Str;
 
 use crate::{
-    core::{ext::Utf16StringExt, utils, Error, Hachimi, SugoiClient}, 
+    core::{ext::Utf16StringExt, utils, Error, Fridgerator, SugoiClient}, 
     il2cpp::{
         ext::{Il2CppStringExt, StringExt}, hook::{umamusume::{StoryTimelineCharaTrackData, StoryTimelineClipData}, UnityEngine_AssetBundleModule::AssetBundle::ASSET_PATH_PREFIX}, symbols::{get_field_from_name, get_field_object_value, get_field_value, set_field_object_value, set_field_value, IList}, types::*
     }
@@ -102,9 +102,9 @@ pub fn on_LoadAsset(_bundle: *mut Il2CppObject, this: *mut Il2CppObject, name: &
         return;
     }
 
-    let hachimi = Hachimi::instance();
+    let fridgerator = Fridgerator::instance();
     let mut tcps = get_TypewriteCountPerSecond(this) as f32;
-    let tcps_mult = hachimi.config.load().story_tcps_multiplier;
+    let tcps_mult = fridgerator.config.load().story_tcps_multiplier;
     if tcps_mult != 1.0 {
         tcps = (tcps * tcps_mult).round();
         set_TypewriteCountPerSecond(this, tcps as i32);
@@ -113,9 +113,9 @@ pub fn on_LoadAsset(_bundle: *mut Il2CppObject, this: *mut Il2CppObject, name: &
     let base_path = name[ASSET_PATH_PREFIX.len()..].path_basename();
     let dict_path = base_path.to_string() + ".json";
 
-    let localized_data = hachimi.localized_data.load();
+    let localized_data = fridgerator.localized_data.load();
     let Some(dict): Option<StoryTimelineDataDict> = localized_data.load_assets_dict(Some(&dict_path)).or_else(|| {
-        if hachimi.config.load().auto_translate_stories {
+        if fridgerator.config.load().auto_translate_stories {
             let Some(full_dict_path) = localized_data.get_assets_path(&dict_path) else {
                 return None;
             };

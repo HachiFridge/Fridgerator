@@ -2,7 +2,7 @@ use std::ptr::null_mut;
 
 use widestring::Utf16Str;
 
-use crate::{core::{ext::Utf16StringExt, Hachimi}, il2cpp::{
+use crate::{core::{ext::Utf16StringExt, Fridgerator}, il2cpp::{
     hook::{
         UnityEngine_AssetBundleModule::AssetBundle,
         UnityEngine_CoreModule::Sprite
@@ -35,7 +35,7 @@ pub fn on_LoadAsset(bundle: *mut Il2CppObject, this: *mut Il2CppObject, name: &U
         return;
     }
     let rel_replace_path = base_path.to_string() + ".png";
-    let localized_data = Hachimi::instance().localized_data.load();
+    let localized_data = Fridgerator::instance().localized_data.load();
     let Some(replace_path) = localized_data.get_assets_path(&rel_replace_path) else {
         return;
     };

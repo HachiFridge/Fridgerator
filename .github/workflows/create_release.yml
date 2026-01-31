@@ -31,7 +31,7 @@ jobs:
       - name: Grant execute permission to build script
         run: chmod +x tools/android/build.sh
       - uses: dtolnay/rust-toolchain@stable
-      - name: Build Hachimi for Android
+      - name: Build Fridgerator for Android
         run: |
           rustup target add armv7-linux-androideabi aarch64-linux-android
           RELEASE=1 ./tools/android/build.sh
@@ -43,7 +43,7 @@ jobs:
           path: |
             build/*.so
             build/sha256.json
-          
+
   build-windows:
     runs-on: windows-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
@@ -84,43 +84,43 @@ jobs:
           Add-Content -Path "Cargo.toml" -Value $patches
 
       - uses: dtolnay/rust-toolchain@stable
-      - name: Build Hachimi for Windows
+      - name: Build Fridgerator for Windows
         run: |
           cargo build --target x86_64-pc-windows-msvc --target-dir build --release
-          move build\x86_64-pc-windows-msvc\release\hachimi.dll build
+          move build\x86_64-pc-windows-msvc\release\fridgerator.dll build
 
       - name: Build Cellar
         run: |
-          git clone --depth 1 --revision d4c3f79801c8131e26df585766c35e5ce11ec57f https://github.com/Hachimi-Hachimi/Cellar
+          git clone --depth 1 --revision d4c3f79801c8131e26df585766c35e5ce11ec57f https://github.com/HachiFridge/Cellar
           cd Cellar
           cargo build --target x86_64-pc-windows-msvc --target-dir build --release
           move build\x86_64-pc-windows-msvc\release\cellar.dll build
           cd ..
 
       - name: Check out FunnyHoney
-        run: git clone --depth 1 --revision 418b5348bd9b7376cc7485c591ca69d49aa4d805 https://codeberg.org/LeadRDRK/FunnyHoney.git
+        run: git clone --depth 1 --revision 418b5348bd9b7376cc7485c591ca69d49aa4d805 https://github.com/HachiFridge/FunnyHoney.git
 
       - name: Build Installer
         run: |
-          git clone --depth 1 --revision 4a09d33bdda922b4f3484f47e6d209414602855f https://github.com/teiosteppa/Installer
-          copy build\hachimi.dll Installer
+          git clone --depth 1 https://github.com/HachiFridge/Installer
+          copy build\fridgerator.dll Installer
           move Cellar\build\cellar.dll Installer
           move FunnyHoney\FunnyHoney.exe Installer
           cd Installer
           cargo build --target x86_64-pc-windows-msvc --target-dir build --release --features compress_bin
           cd ..
-          move Installer\build\x86_64-pc-windows-msvc\release\hachimi_installer.exe build
+          move Installer\build\x86_64-pc-windows-msvc\release\fridgerator_installer.exe build
 
       - name: Get checksums for Windows binaries
         shell: bash
         run: |
           curl -L "https://github.com/BLAKE3-team/BLAKE3/releases/latest/download/b3sum_windows_x64_bin.exe" -o b3sum.exe
-          DLL_HASH=($(./b3sum.exe build/hachimi.dll | tr -d '\r'))
-          EXE_HASH=($(./b3sum.exe build/hachimi_installer.exe | tr -d '\r'))
+          DLL_HASH=($(./b3sum.exe build/fridgerator.dll | tr -d '\r'))
+          EXE_HASH=($(./b3sum.exe build/fridgerator_installer.exe | tr -d '\r'))
           cat <<EOF > build/blake3.json
           {
-            "hachimi.dll": "$DLL_HASH",
-            "hachimi_installer.exe": "$EXE_HASH"
+            "fridgerator.dll": "$DLL_HASH",
+            "fridgerator_installer.exe": "$EXE_HASH"
           }
           EOF
 
@@ -129,8 +129,8 @@ jobs:
         with:
           name: windows
           path: |
-            build/hachimi.dll
-            build/hachimi_installer.exe
+            build/fridgerator.dll
+            build/fridgerator_installer.exe
 
   create-release:
     needs: [build-android, build-windows]

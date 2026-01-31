@@ -36,6 +36,6 @@ pub fn get_region(package_name: &str) -> Region {
 
 pub fn get_data_dir(package_name: &str) -> PathBuf {
     let mut path = Path::new("/sdcard/Android/media").join(package_name);
-    path.push("hachimi");
+    path.push("fridgerator");
     path
 }

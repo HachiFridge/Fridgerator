@@ -604,6 +604,56 @@ dependencies = [
 ]
 
 [[package]]
+name = "fridgerator"
+version = "0.22.0"
+dependencies = [
+ "android_logger",
+ "arc-swap",
+ "atomic_float",
+ "blake3",
+ "cc",
+ "chrono",
+ "cstr",
+ "discord-rich-presence",
+ "dobby-rs",
+ "egui",
+ "egui-directx11",
+ "egui-scale",
+ "egui_extras",
+ "egui_glow",
+ "fnv",
+ "glow",
+ "image",
+ "jni",
+ "libc",
+ "log",
+ "memmap2",
+ "minhook",
+ "once_cell",
+ "pelite",
+ "png 0.17.16",
+ "procfs",
+ "rusqlite",
+ "rust-i18n",
+ "serde",
+ "serde_json",
+ "simplelog",
+ "size",
+ "sqlparser",
+ "sys-locale",
+ "tauri-winres",
+ "textwrap",
+ "thread-priority",
+ "tiny_http",
+ "unicode-width 0.1.14",
+ "ureq",
+ "widestring",
+ "windebug_logger",
+ "windows 0.62.2",
+ "zip",
+]
+
+[[package]]
 name = "getrandom"
 version = "0.2.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -654,56 +704,6 @@ dependencies = [
  "slotmap",
  "wasm-bindgen",
  "web-sys",
-]
-
-[[package]]
-name = "hachimi"
-version = "0.22.0"
-dependencies = [
- "android_logger",
- "arc-swap",
- "atomic_float",
- "blake3",
- "cc",
- "chrono",
- "cstr",
- "discord-rich-presence",
- "dobby-rs",
- "egui",
- "egui-directx11",
- "egui-scale",
- "egui_extras",
- "egui_glow",
- "fnv",
- "glow",
- "image",
- "jni",
- "libc",
- "log",
- "memmap2",
- "minhook",
- "once_cell",
- "pelite",
- "png 0.17.16",
- "procfs",
- "rusqlite",
- "rust-i18n",
- "serde",
- "serde_json",
- "simplelog",
- "size",
- "sqlparser",
- "sys-locale",
- "tauri-winres",
- "textwrap",
- "thread-priority",
- "tiny_http",
- "unicode-width 0.1.14",
- "ureq",
- "widestring",
- "windebug_logger",
- "windows 0.62.2",
- "zip",
 ]
 
 [[package]]

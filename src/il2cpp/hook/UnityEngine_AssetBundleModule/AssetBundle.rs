@@ -4,7 +4,7 @@ use fnv::FnvHashMap;
 use once_cell::sync::Lazy;
 use widestring::Utf16Str;
 
-use crate::{core::{ext::Utf16StringExt, hachimi::AssetMetadata}, il2cpp::{
+use crate::{core::{ext::Utf16StringExt, fridgerator::AssetMetadata}, il2cpp::{
     api::il2cpp_resolve_icall, ext::{Il2CppObjectExt, Il2CppStringExt}, hook::{
         umamusume::{StoryRaceTextAsset, StoryTimelineData, TextDotData, TextRubyData},
         Cute_UI_Assembly::AtlasReference,

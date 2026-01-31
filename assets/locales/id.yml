@@ -1,4 +1,4 @@
-hachimi: "Hachimi Edge"
+fridgerator: "Fridgerator"
 
 windows:
   menu_open_key: "Arrow Key - Kanan"
@@ -77,12 +77,12 @@ first_time_setup:
   title: "Setup Pertama Kali"
   welcome_heading: "Selamat Datang"
   welcome_content: >-
-    Hachimi telah terpasang! Ini adalah proses pengaturan awal.
+    Fridgerator telah terpasang! Ini adalah proses pengaturan awal.
     Jika kamu tidak tertarik pada fitur translasi, kamu bisa melewatinya dengan menutup dialog ini.
 
 
     SANGGAHAN (DISCLAIMER):
-    Hachimi adalah proyek komunitas. Translasi yang tersedia adalah hasil kontribusi dari beragam komunitas.
+    Fridgerator adalah proyek komunitas. Translasi yang tersedia adalah hasil kontribusi dari beragam komunitas.
     Proyek ini tidak dibuat/didukung oleh Cygames, Inc., dan berpotensi melanggar S&K game ini. Kamu dianggap
     bersedia menerima segala risiko yang ada apabila melanjutkan.
   translation_repo_heading: "Repositori Translasi"
@@ -117,7 +117,7 @@ config_editor:
   restore_defaults: "Kembalikan semula"
   disable_overlay: "Matikan overlay (GUI)"
   disable_overlay_warning: >-
-    Opsi ini akan mematikan overlay (GUI) Hachimi.
+    Opsi ini akan mematikan overlay (GUI) Fridgerator.
     Kamu tidak bisa mengakses editor konfigurasi setelah kamu memulai ulang game.
     Jika tidak disengaja dinyalakan, mohon tutup dialog ini dan matikan opsinya!
   meta_index_url: "URL Meta Terjemahan"
@@ -184,7 +184,7 @@ tl_update_dialog:
 
 update_prompt_dialog:
   title: "Pembaruan tersedia!"
-  content: "Versi terbaru Hachimi telah tersedia (%{version}).\nApa kamu ingin memasangnya?\n\nGame akan dimulai ulang saat proses penerapan pembaruan."
+  content: "Versi terbaru Fridgerator telah tersedia (%{version}).\nApa kamu ingin memasangnya?\n\nGame akan dimulai ulang saat proses penerapan pembaruan."
 
 updating_dialog:
   title: "Memperbarui"
@@ -193,10 +193,10 @@ updating_dialog:
 steam_overlay_conflict_dialog:
   title: "Peringatan"
   content: >-
-    Pembelian mungkin gagal dengan overlay Hachimi yang menyala. Jika overlay Steam muncul saat melakukan 
+    Pembelian mungkin gagal dengan overlay Fridgerator yang menyala. Jika overlay Steam muncul saat melakukan 
     transaksi, mohon abaikan pesan ini dan klik tombol Tidak. Jika tidak berfungsi, mohon tekan tombol Ya
-    untuk mulai ulang dan overlay Hachimi akan dimatikan dan kamu bisa melakukan pembelian. Setelah itu kamu 
-    bisa menyalakan ulang game kembali setelahnya untuk mengaktifkan Hachimi.
+    untuk mulai ulang dan overlay Fridgerator akan dimatikan dan kamu bisa melakukan pembelian. Setelah itu kamu 
+    bisa menyalakan ulang game kembali setelahnya untuk mengaktifkan Fridgerator.
 key_names:
   left: "Panah Kiri"
   right: "Panah Kanan"

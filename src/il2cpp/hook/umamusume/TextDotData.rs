@@ -1,7 +1,7 @@
 use widestring::Utf16Str;
 
 use crate::{
-    core::{game::Region, Hachimi},
+    core::{game::Region, Fridgerator},
     il2cpp::{
         api::il2cpp_array_new,
         symbols::{get_field_from_name, set_field_object_value},
@@ -25,14 +25,14 @@ fn DotBlockData_class() -> *mut Il2CppClass {
 }
 
 pub fn on_LoadAsset(_bundle: *mut Il2CppObject, this: *mut Il2CppObject, _name: &Utf16Str) {
-    if Hachimi::instance().localized_data.load().config.remove_ruby {
+    if Fridgerator::instance().localized_data.load().config.remove_ruby {
         let empty_array = il2cpp_array_new(DotBlockData_class(), 0);
         set_DataArray(this, empty_array);
     }
 }
 
 pub fn init(umamusume: *const Il2CppImage) {
-    if Hachimi::instance().game.region != Region::Japan {
+    if Fridgerator::instance().game.region != Region::Japan {
         return;
     }
 

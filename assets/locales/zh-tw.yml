@@ -1,4 +1,4 @@
-hachimi: "Hachimi Edge"
+fridgerator: "Fridgerator"
 
 windows:
   menu_open_key: "右方向鍵"
@@ -74,7 +74,7 @@ first_time_setup:
   title: "設定精靈"
   welcome_heading: "歡迎"
   welcome_content: >-
-    歡迎使用 Hachimi！此設定精靈將會引導您完成翻譯器的初始化。
+    歡迎使用 Fridgerator！此設定精靈將會引導您完成翻譯器的初始化。
     如果您不需要使用翻譯功能，您可以關閉此對話框。
     您也可以隨時在設置編輯器中更改這些選項。
   translation_repo_heading: "翻譯資料庫"
@@ -109,7 +109,7 @@ config_editor:
   language: "語言"
   disable_overlay: "禁用覆蓋層 (GUI)"
   disable_overlay_warning: >-
-    此選項會在您重新啟動遊戲後停用 Hachimi 覆蓋層，
+    此選項會在您重新啟動遊戲後停用 Fridgerator 覆蓋層，
     這意味著您將無法訪問設置編輯器。
     如果是不小心誤觸此選項，請關閉此對話框並禁用該選項。
   meta_index_url: "翻譯 Meta URL"

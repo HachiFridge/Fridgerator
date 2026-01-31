@@ -3,7 +3,7 @@ use rusqlite::{Connection, OpenFlags};
 use fnv::{FnvHashMap, FnvHashSet};
 use sqlparser::ast;
 use crate::{
-    core::{utils::{get_masterdb_path, fit_text, wrap_fit_text}, Hachimi},
+    core::{utils::{get_masterdb_path, fit_text, wrap_fit_text}, Fridgerator},
     il2cpp::{ext::StringExt, hook::LibNative_Runtime, types::{Il2CppObject, Il2CppString}}
 };
 
@@ -54,7 +54,7 @@ impl CharacterData {
 
     pub fn get_name(&self, id: i32) -> String {
         // check text_data_dict.json (category 170)
-        if let Some(category_170) = Hachimi::instance().localized_data.load().text_data_dict.get(&170) {
+        if let Some(category_170) = Fridgerator::instance().localized_data.load().text_data_dict.get(&170) {
             if let Some(name) = category_170.get(&id) {
                 return name.clone();
             }
@@ -198,11 +198,11 @@ impl TextDataQuery {
 
     pub fn get_skill_name(index: i32) -> Option<*mut Il2CppString> {
         // Return None if skill name translation is disabled
-        if Hachimi::instance().config.load().disable_skill_name_translation {
+        if Fridgerator::instance().config.load().disable_skill_name_translation {
             return None;
         }
 
-        let localized_data = Hachimi::instance().localized_data.load();
+        let localized_data = Fridgerator::instance().localized_data.load();
         let text_opt = localized_data
             .text_data_dict
             .get(&47)
@@ -232,7 +232,7 @@ impl TextDataQuery {
     }
 
     pub fn get_skill_desc(index: i32) -> Option<*mut Il2CppString> {
-        let localized_data = Hachimi::instance().localized_data.load();
+        let localized_data = Fridgerator::instance().localized_data.load();
         let text_opt = localized_data
             .text_data_dict
             .get(&48)
@@ -292,7 +292,7 @@ impl SelectQueryState for TextDataQuery {
                     _ => ()
                 };
 
-                return Hachimi::instance().localized_data.load()
+                return Fridgerator::instance().localized_data.load()
                     .text_data_dict
                     .get(&category)
                     .map(|c| c.get(&index).map(|s| s.to_il2cpp_string()))
@@ -346,7 +346,7 @@ impl SelectQueryState for CharacterSystemTextQuery {
 
         if let Some(character_id) = self.character_id.int_value {
             if let Some(voice_id) = self.voice_id.value_or_try_get_int(query) {
-                return Hachimi::instance().localized_data.load()
+                return Fridgerator::instance().localized_data.load()
                     .character_system_text_dict
                     .get(&character_id)
                     .map(|c| c.get(&voice_id).map(|s| s.to_il2cpp_string()))
@@ -385,7 +385,7 @@ impl SelectQueryState for RaceJikkyoCommentQuery {
         }
 
         if let Some(id) = self.id.try_get_int(query) {
-            return Hachimi::instance().localized_data.load()
+            return Fridgerator::instance().localized_data.load()
                 .race_jikkyo_comment_dict
                 .get(&id)
                 .map(|s| s.to_il2cpp_string())
@@ -422,7 +422,7 @@ impl SelectQueryState for RaceJikkyoMessageQuery {
         }
 
         if let Some(id) = self.id.try_get_int(query) {
-            return Hachimi::instance().localized_data.load()
+            return Fridgerator::instance().localized_data.load()
                 .race_jikkyo_message_dict
                 .get(&id)
                 .map(|s| s.to_il2cpp_string())

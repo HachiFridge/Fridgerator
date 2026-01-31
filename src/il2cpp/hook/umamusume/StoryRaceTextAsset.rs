@@ -3,7 +3,7 @@ use std::ptr::null_mut;
 use widestring::Utf16Str;
 
 use crate::{
-    core::{ext::Utf16StringExt, Hachimi},
+    core::{ext::Utf16StringExt, Fridgerator},
     il2cpp::{
         ext::{Il2CppObjectExt, StringExt}, hook::UnityEngine_AssetBundleModule::AssetBundle::ASSET_PATH_PREFIX, symbols::{get_field_from_name, get_field_object_value, set_field_object_value, Array}, types::*
     }
@@ -40,7 +40,7 @@ pub fn on_LoadAsset(_bundle: *mut Il2CppObject, this: *mut Il2CppObject, name: &
 
     let base_path = name[ASSET_PATH_PREFIX.len()..].path_basename();
     let dict_path = base_path.to_string() + ".json";
-    let localized_data = Hachimi::instance().localized_data.load();
+    let localized_data = Fridgerator::instance().localized_data.load();
     let Some(dict): Option<Vec<String>> = localized_data.load_assets_dict(Some(&dict_path)) else {
         return;
     };

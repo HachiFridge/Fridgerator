@@ -1,5 +1,5 @@
 use crate::{
-    core::{hachimi::UITextConfig, Hachimi},
+    core::{fridgerator::UITextConfig, Fridgerator},
     il2cpp::{
     ext::StringExt, hook::{UnityEngine_CoreModule::{Component, GameObject}, UnityEngine_TextRenderingModule::TextAnchor, UnityEngine_UI::Text}, symbols::get_method_addr, types::*
 }};
@@ -9,7 +9,7 @@ use super::{ButtonCommon, CharacterNoteTopView, TextCommon, ViewControllerBase};
 type InitializeViewFn = extern "C" fn(this: *mut Il2CppObject) -> *mut Il2CppObject;
 extern "C" fn InitializeView(this: *mut Il2CppObject) -> *mut Il2CppObject {
     let view = ViewControllerBase::GetView(this);
-    let config = &Hachimi::instance().localized_data.load().config;
+    let config = &Fridgerator::instance().localized_data.load().config;
 
     if let Some(config) = config.character_note_top_gallery_button.as_ref() {
         let gallery_button = CharacterNoteTopView::get_ButtonGallery(view);

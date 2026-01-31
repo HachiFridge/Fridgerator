@@ -1,4 +1,4 @@
-hachimi: "Hachimi Edge"
+fridgerator: "Fridgerator"
 
 windows:
   menu_open_key: "右方向键"
@@ -76,11 +76,11 @@ first_time_setup:
   title: "初始化设置"
   welcome_heading: "欢迎"
   welcome_content: >-
-    Hachimi 已安装成功！本向导将引导您完成初始设置。
+    Fridgerator 已安装成功！本向导将引导您完成初始设置。
     
     如果您不需要使用翻译功能，可以直接关闭此窗口跳过设置。
     
-    免责声明：Hachimi 是一个社区驱动的项目。所有翻译均由不同的社区贡献者制作。
+    免责声明：Fridgerator 是一个社区驱动的项目。所有翻译均由不同的社区贡献者制作。
     该项目并非由 Cygames, Inc. 开发或认可，且违反了游戏的服务条款。继续使用即表示
     您接受自行承担使用风险。
   translation_repo_heading: "翻译仓库"
@@ -117,7 +117,7 @@ config_editor:
   restore_defaults: "恢复默认设置"
   disable_overlay: "禁用覆盖层(GUI)"
   disable_overlay_warning: >-
-    此选项将在游戏重启后禁用Hachimi的GUI，
+    此选项将在游戏重启后禁用Fridgerator的GUI，
     您将无法再访问配置编辑器。
     如非本意，请关闭此窗口并禁用此选项。
   meta_index_url: "翻译 Meta URL"
@@ -182,7 +182,7 @@ tl_update_dialog:
 update_prompt_dialog:
   title: "新版本可用"
   content: |
-    发现新的Hachimi更新 (%{version})，是否立即安装？
+    发现新的Fridgerator更新 (%{version})，是否立即安装？
     安装完成后游戏将自动重启。
 
 updating_dialog:
@@ -192,11 +192,11 @@ updating_dialog:
 steam_overlay_conflict_dialog:
   title: "注意"
   content: >-
-    启用 Hachimi GUI 时，内购功能可能无法正常工作。
+    启用 Fridgerator GUI 时，内购功能可能无法正常工作。
     如果 Steam 覆盖层可以显示而且您可以正常进行内购，请忽略此消息并按「否」。
-    如果您无法进行内购，请按「是」以临时禁用 Hachimi GUI 并关闭游戏。
-    在下次启动游戏时，Hachimi GUI 将被禁用，此时您可以正常进行内购操作。
-    购买完成后，请重启游戏以重新启用 Hachimi GUI。
+    如果您无法进行内购，请按「是」以临时禁用 Fridgerator GUI 并关闭游戏。
+    在下次启动游戏时，Fridgerator GUI 将被禁用，此时您可以正常进行内购操作。
+    购买完成后，请重启游戏以重新启用 Fridgerator GUI。
     
 key_names:
   left: "左方向键"

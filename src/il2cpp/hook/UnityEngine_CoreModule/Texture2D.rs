@@ -2,7 +2,7 @@ use std::{path::Path, ptr::null_mut};
 
 use widestring::Utf16Str;
 
-use crate::{core::{ext::Utf16StringExt, Hachimi}, il2cpp::{
+use crate::{core::{ext::Utf16StringExt, Fridgerator}, il2cpp::{
     api::{il2cpp_object_new, il2cpp_resolve_icall},
     hook::{
         mscorlib,
@@ -120,7 +120,7 @@ pub fn on_LoadAsset(_bundle: *mut Il2CppObject, this: *mut Il2CppObject, name: &
 
     let orig_path = &name[ASSET_PATH_PREFIX.len()..];
     let rel_replace_path = Path::new("textures").join(orig_path.to_string());
-    let localized_data = Hachimi::instance().localized_data.load();
+    let localized_data = Fridgerator::instance().localized_data.load();
     let Some(replace_path) = localized_data.get_assets_path(&rel_replace_path) else {
         return;
     };

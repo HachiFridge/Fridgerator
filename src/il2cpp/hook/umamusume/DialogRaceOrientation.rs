@@ -1,4 +1,4 @@
-use crate::{core::{game::Region, Hachimi}, il2cpp::{symbols::get_method_addr, types::*}};
+use crate::{core::{game::Region, Fridgerator}, il2cpp::{symbols::get_method_addr, types::*}};
 
 use super::RaceInfo;
 
@@ -10,7 +10,7 @@ extern "C" fn SetupAndOpen(
     this: *mut Il2CppObject, dialog_data: *mut Il2CppObject, on_selected: *mut Il2CppObject,
     on_cancel: *mut Il2CppObject, is_special_unlock_race: bool, race_info: *mut Il2CppObject
 ) {
-    let force_allow_dynamic_camera = Hachimi::instance().config.load().force_allow_dynamic_camera;
+    let force_allow_dynamic_camera = Fridgerator::instance().config.load().force_allow_dynamic_camera;
     let mut orig_race_type = None;
     if force_allow_dynamic_camera {
         orig_race_type = Some(RaceInfo::get_RaceType(race_info));
@@ -27,7 +27,7 @@ extern "C" fn SetupAndOpen(
 }
 
 pub fn init(umamusume: *const Il2CppImage) {
-    if Hachimi::instance().game.region != Region::Japan {
+    if Fridgerator::instance().game.region != Region::Japan {
         return;
     }
 

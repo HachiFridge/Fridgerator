@@ -1,6 +1,6 @@
 use std::sync::atomic::{self, AtomicBool};
 
-use crate::{core::{Hachimi, game::Region}, il2cpp::{symbols::get_method_addr, types::*}};
+use crate::{core::{Fridgerator, game::Region}, il2cpp::{symbols::get_method_addr, types::*}};
 
 static SPLASH_SHOWN: AtomicBool = AtomicBool::new(false);
 pub fn is_splash_shown() -> bool {
@@ -50,7 +50,7 @@ extern "C" fn ChangeViewOther(
 pub fn init(umamusume: *const Il2CppImage) {
     get_class_or_return!(umamusume, Gallop, SceneManager);
 
-    if Hachimi::instance().game.region == Region::Japan {
+    if Fridgerator::instance().game.region == Region::Japan {
         let ChangeView_addr = get_method_addr(SceneManager, c"ChangeView", 6);
         new_hook!(ChangeView_addr, ChangeViewJp);
     }

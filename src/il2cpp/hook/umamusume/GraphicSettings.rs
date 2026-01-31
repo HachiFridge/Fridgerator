@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::{core::Hachimi, il2cpp::{symbols::{get_method_addr}, types::*}};
+use crate::{core::Fridgerator, il2cpp::{symbols::{get_method_addr}, types::*}};
 
 use super::{LowResolutionCamera, SingleModeStartResultCharaViewer};
 
@@ -22,7 +22,7 @@ pub fn instance() -> *mut Il2CppObject {
 type GetVirtualResolutionFn = extern "C" fn(this: *mut Il2CppObject) -> Vector2Int_t;
 extern "C" fn GetVirtualResolution(this: *mut Il2CppObject) -> Vector2Int_t {
     let mut res = get_orig_fn!(GetVirtualResolution, GetVirtualResolutionFn)(this);
-    let mult = Hachimi::instance().config.load().virtual_res_mult;
+    let mult = Fridgerator::instance().config.load().virtual_res_mult;
     if mult != 1.0 {
         res *= mult;
     }
@@ -32,7 +32,7 @@ extern "C" fn GetVirtualResolution(this: *mut Il2CppObject) -> Vector2Int_t {
 type GetVirtualResolution3DFn = extern "C" fn(this: *mut Il2CppObject, is_forced_wide_aspect: bool) -> Vector2Int_t;
 extern "C" fn GetVirtualResolution3D(this: *mut Il2CppObject, is_forced_wide_aspect: bool) -> Vector2Int_t {
     let mut res = get_orig_fn!(GetVirtualResolution3D, GetVirtualResolution3DFn)(this, is_forced_wide_aspect);
-    let mult = Hachimi::instance().config.load().virtual_res_mult;
+    let mult = Fridgerator::instance().config.load().virtual_res_mult;
     if mult != 1.0 &&
         !SingleModeStartResultCharaViewer::setting_up_image_effect() &&
         !LowResolutionCamera::creating_render_texture()
@@ -45,7 +45,7 @@ extern "C" fn GetVirtualResolution3D(this: *mut Il2CppObject, is_forced_wide_asp
 type GetVirtualResolutionWidth3DFn = extern "C" fn(this: *mut Il2CppObject) -> i32;
 extern "C" fn GetVirtualResolutionWidth3D(this: *mut Il2CppObject) -> i32 {
     let mut width = get_orig_fn!(GetVirtualResolutionWidth3D, GetVirtualResolutionWidth3DFn)(this);
-    let mult = Hachimi::instance().config.load().virtual_res_mult;
+    let mult = Fridgerator::instance().config.load().virtual_res_mult;
     if mult != 1.0 {
         width = (width as f32 * mult) as i32;
     }
@@ -80,7 +80,7 @@ pub enum MsaaQuality {
 
 type get_IsMSAAFn = extern "C" fn(this: *mut Il2CppObject) -> bool;
 pub extern "C" fn get_IsMSAA(this: *mut Il2CppObject) -> bool {
-    if Hachimi::instance().config.load().msaa != MsaaQuality::Disabled {
+    if Fridgerator::instance().config.load().msaa != MsaaQuality::Disabled {
         return true;
     }
     get_orig_fn!(get_IsMSAA, get_IsMSAAFn)(this)
@@ -88,21 +88,21 @@ pub extern "C" fn get_IsMSAA(this: *mut Il2CppObject) -> bool {
 
 type set_ResolutionScaleFn = extern "C" fn(this: *mut Il2CppObject, value: f32);
 extern "C" fn set_ResolutionScale(this: *mut Il2CppObject, value: f32) {
-    let render_scale = Hachimi::instance().config.load().render_scale;
+    let render_scale = Fridgerator::instance().config.load().render_scale;
     let target_value = if render_scale != 1.0 { render_scale } else { value };
     get_orig_fn!(set_ResolutionScale, set_ResolutionScaleFn)(this, target_value);
 }
 
 type set_ResolutionScale2DFn = extern "C" fn(this: *mut Il2CppObject, value: f32);
 pub extern "C" fn set_ResolutionScale2D(this: *mut Il2CppObject, value: f32) {
-    let render_scale = Hachimi::instance().config.load().render_scale;
+    let render_scale = Fridgerator::instance().config.load().render_scale;
     let target_value = if render_scale != 1.0 { render_scale } else { value };
     get_orig_fn!(set_ResolutionScale2D, set_ResolutionScale2DFn)(this, target_value);
 }
 
 type Get3DAntiAliasingLevelFn = extern "C" fn(this: *mut Il2CppObject, allowMSAA: bool) -> i32;
 extern "C" fn Get3DAntiAliasingLevel(this: *mut Il2CppObject, allowMSAA: bool) -> i32 {
-    let msaa = Hachimi::instance().config.load().msaa;
+    let msaa = Fridgerator::instance().config.load().msaa;
     if allowMSAA && msaa != MsaaQuality::Disabled {
         return msaa as i32;
     }
@@ -111,7 +111,7 @@ extern "C" fn Get3DAntiAliasingLevel(this: *mut Il2CppObject, allowMSAA: bool) -
 
 type ApplyGraphicsQualityFn = extern "C" fn(this: *mut Il2CppObject, quality: GraphicsQuality, force: bool);
 extern "C" fn ApplyGraphicsQuality(this: *mut Il2CppObject, quality: GraphicsQuality, force: bool) {
-    let custom_quality = Hachimi::instance().config.load().graphics_quality;
+    let custom_quality = Fridgerator::instance().config.load().graphics_quality;
     if custom_quality != GraphicsQuality::Default {
         return get_orig_fn!(ApplyGraphicsQuality, ApplyGraphicsQualityFn)(this, custom_quality, true);
     }

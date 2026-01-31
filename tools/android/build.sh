@@ -44,8 +44,8 @@ cargo build --target=armv7-linux-androideabi --target-dir=build $CARGOARGS
 
 pushd build
 
-cp "aarch64-linux-android/$BUILD_TYPE/libhachimi.so" libmain-arm64-v8a.so
-cp "armv7-linux-androideabi/$BUILD_TYPE/libhachimi.so" libmain-armeabi-v7a.so
+cp "aarch64-linux-android/$BUILD_TYPE/libfridgerator.so" libmain-arm64-v8a.so
+cp "armv7-linux-androideabi/$BUILD_TYPE/libfridgerator.so" libmain-armeabi-v7a.so
 
 ARM64_V8A_SHA256=($(sha256sum libmain-arm64-v8a.so))
 ARMEABI_V7A_SHA256=($(sha256sum libmain-armeabi-v7a.so))

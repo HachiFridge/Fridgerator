@@ -4,7 +4,7 @@ use rust_i18n::t;
 use serde::{Deserialize, Serialize};
 use tiny_http::{Header, Method, Request, Response, Server};
 use crate::{core::utils::notify_error, il2cpp::{hook::umamusume::{GameSystem, StoryTimelineController, StoryTimelineData}, symbols::{IList, Thread}}};
-use super::{Error, Gui, Hachimi};
+use super::{Error, Gui, Fridgerator};
 
 pub fn start_http(listen_all: bool) {
     std::thread::spawn(move || http_thread(listen_all));
@@ -64,7 +64,7 @@ static STORY_GOTO_BLOCK_CVAR: Condvar = Condvar::new();
 fn on_http_request(request: &mut Request) -> Result<CommandResponse, Error> {
     let method = request.method();
     if *method == Method::Get {
-        return Ok(CommandResponse::HelloWorld { message: "Hachimi's IPC server is working!" });
+        return Ok(CommandResponse::HelloWorld { message: "Fridgerator's IPC server is working!" });
     }
     else if *method != Method::Post {
         return Ok(CommandResponse::error("Invalid request method".to_owned()));
@@ -145,7 +145,7 @@ fn on_http_request(request: &mut Request) -> Result<CommandResponse, Error> {
         },
 
         Command::ReloadLocalizedData => {
-            Hachimi::instance().load_localized_data();
+            Fridgerator::instance().load_localized_data();
             if let Some(mutex) = Gui::instance() {
                 mutex.lock().unwrap().show_notification(&t!("notification.localized_data_reloaded"));
             }

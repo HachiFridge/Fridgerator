@@ -1,7 +1,7 @@
 use std::ptr::null_mut;
 
 use crate::{
-    core::Hachimi,
+    core::Fridgerator,
     il2cpp::{
         ext::{Il2CppStringExt, StringExt}, hook::UnityEngine_TextRenderingModule::TextGenerator::IgnoreTGFiltersContext, symbols::{get_field_from_name, get_field_object_value, get_method_addr, set_field_object_value}, types::*
     }
@@ -27,7 +27,7 @@ extern "C" fn _UpdateText(this: *mut Il2CppObject) {
 
     // doesn't run through TextGenerator, ignore its filters
     if text.as_slice().contains(&36) { // 36 = dollar sign ($)
-        set__text(this, Hachimi::instance().template_parser
+        set__text(this, Fridgerator::instance().template_parser
             .eval_with_context(&text.to_string(), &mut IgnoreTGFiltersContext())
             .to_il2cpp_string());
     }

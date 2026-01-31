@@ -1,10 +1,10 @@
-use crate::{core::{game::Region, Hachimi}, il2cpp::{ext::LocalizedDataExt, symbols::{get_method_addr, get_method_overload_addr}, types::*}};
+use crate::{core::{game::Region, Fridgerator}, il2cpp::{ext::LocalizedDataExt, symbols::{get_method_addr, get_method_overload_addr}, types::*}};
 
 use super::TextFormat;
 
 type GetChineseFontFn = extern "C" fn(this: *mut Il2CppObject) -> *mut Il2CppObject;
 extern "C" fn GetChineseFont(this: *mut Il2CppObject) -> *mut Il2CppObject {
-    let font = Hachimi::instance().localized_data.load().load_replacement_font();
+    let font = Fridgerator::instance().localized_data.load().load_replacement_font();
     if !font.is_null() {
         return font;
     }
@@ -15,7 +15,7 @@ type LoadResourcesFolderFontFn = extern "C" fn(this: *mut Il2CppObject, font_typ
 extern "C" fn LoadResourcesFolderFont(this: *mut Il2CppObject, font_type: TextFormat::Font) -> *mut Il2CppObject {
     match font_type {
         TextFormat::Font::Dynamic01 | TextFormat::Font::Chinese_Font01 => {
-            let font = Hachimi::instance().localized_data.load().load_replacement_font();
+            let font = Fridgerator::instance().localized_data.load().load_replacement_font();
             if !font.is_null() {
                 return font;
             }
@@ -26,7 +26,7 @@ extern "C" fn LoadResourcesFolderFont(this: *mut Il2CppObject, font_type: TextFo
 }
 
 pub fn init(umamusume: *const Il2CppImage) {
-    if Hachimi::instance().game.region != Region::Japan {
+    if Fridgerator::instance().game.region != Region::Japan {
         return;
     }
 

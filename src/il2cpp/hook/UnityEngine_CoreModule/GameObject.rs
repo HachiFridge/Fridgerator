@@ -1,7 +1,7 @@
 use widestring::Utf16Str;
 
 use crate::{
-    core::{Hachimi, ext::Utf16StringExt},
+    core::{Fridgerator, ext::Utf16StringExt},
     il2cpp::{
         api::il2cpp_resolve_icall,
         ext::Il2CppObjectExt,
@@ -88,7 +88,7 @@ pub fn on_LoadAsset(bundle: *mut Il2CppObject, this: *mut Il2CppObject, name: &U
 }
 
 fn customize(component: *mut Il2CppObject) {
-    let shadow_resolution = Hachimi::instance().config.load().shadow_resolution;
+    let shadow_resolution = Fridgerator::instance().config.load().shadow_resolution;
     if shadow_resolution != ShadowResolution::Default {
         match unsafe { (*component).klass() } {
             // graphics quality - shadow resolution

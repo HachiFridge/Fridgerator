@@ -1,5 +1,5 @@
 use crate::{
-    core::{utils::scale_to_aspect_ratio, Hachimi},
+    core::{utils::scale_to_aspect_ratio, Fridgerator},
     il2cpp::{api::il2cpp_resolve_icall, symbols::get_method_addr, types::*},
 };
 
@@ -16,7 +16,7 @@ static mut GET_FULLSCREEN_ADDR: usize = 0;
 impl_addr_wrapper_fn!(get_fullScreen, GET_FULLSCREEN_ADDR, bool,);
 
 pub fn apply_auto_full_screen(mut width: i32, mut height: i32) -> bool {
-    let windows_config = &Hachimi::instance().config.load().windows;
+    let windows_config = &Fridgerator::instance().config.load().windows;
     let preferred_res = &windows_config.full_screen_res;
     let (preferred_width, preferred_height) = if preferred_res.width > 0 && preferred_res.height > 0 {
         (preferred_res.width, preferred_res.height)
@@ -46,7 +46,7 @@ pub fn apply_auto_full_screen(mut width: i32, mut height: i32) -> bool {
 
 type SetResolutionInjectedFn = extern "C" fn(width: i32, height: i32, fullscreen_mode: i32, preferred_refresh_rate: *const RefreshRate);
 extern "C" fn SetResolution_Injected(width: i32, height: i32, full_screen_mode: i32, preferred_refresh_rate: *const RefreshRate) {
-    let windows_config = &Hachimi::instance().config.load().windows;
+    let windows_config = &Fridgerator::instance().config.load().windows;
     if windows_config.auto_full_screen {
         if apply_auto_full_screen(width, height) {
             return;

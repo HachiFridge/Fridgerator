@@ -2,11 +2,11 @@
 
 macro_rules! new_hook {
     ($orig:ident, $hook:ident) => (
-        let hachimi = crate::core::Hachimi::instance();
-        if !hachimi.config.load().disabled_hooks.contains(stringify!($hook)) {
+        let fridgerator = crate::core::Fridgerator::instance();
+        if !fridgerator.config.load().disabled_hooks.contains(stringify!($hook)) {
             info!("new_hook!: {}", stringify!($hook));
             if ($orig != 0) {
-                let res = hachimi.interceptor.hook($orig as usize, $hook as *const () as usize);
+                let res = fridgerator.interceptor.hook($orig as usize, $hook as *const () as usize);
                 if let Err(e) = res {
                     error!("{}", e);
                 }

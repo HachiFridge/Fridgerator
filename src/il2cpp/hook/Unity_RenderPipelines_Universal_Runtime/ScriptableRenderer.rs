@@ -1,5 +1,5 @@
 use crate::{
-    core::Hachimi,
+    core::Fridgerator,
     il2cpp::{
         symbols::get_method_addr, types::*,
         hook::umamusume::GraphicSettings::MsaaQuality
@@ -11,7 +11,7 @@ type GetRenderTextureDescriptorFn = extern "C" fn(cameraData: *mut isize,  rende
 extern "C" fn GetRenderTextureDescriptor(cameraData: *mut isize, renderPass: *mut Il2CppObject, targetRT: *mut RenderTextureDescriptor) {
     get_orig_fn!(GetRenderTextureDescriptor, GetRenderTextureDescriptorFn)(cameraData, renderPass, targetRT);
 
-    let msaa = Hachimi::instance().config.load().msaa;
+    let msaa = Fridgerator::instance().config.load().msaa;
     if msaa != MsaaQuality::Disabled {
         unsafe {
             (*targetRT).msaaSamples = msaa as i32;

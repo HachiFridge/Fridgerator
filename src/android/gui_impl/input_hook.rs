@@ -11,7 +11,7 @@ use jni::{
     JNIEnv,
 };
 
-use crate::{core::{Error, Gui, Hachimi}, il2cpp::symbols::Thread};
+use crate::{core::{Error, Gui, Fridgerator}, il2cpp::symbols::Thread};
 
 use super::keymap;
 
@@ -155,7 +155,7 @@ extern "C" fn nativeInjectEvent(mut env: JNIEnv, obj: JObject, input_event: JObj
                 VOLUME_UP_PRESSED.store(pressed, Ordering::Relaxed);
 
                 if pressed && repeat_count == 0 {
-                    if Hachimi::instance().config.load().hide_ingame_ui_hotkey && check_volume_up_double_tap(now) {
+                    if Fridgerator::instance().config.load().hide_ingame_ui_hotkey && check_volume_up_double_tap(now) {
                         return JNI_TRUE; 
                     }
                 }
@@ -170,14 +170,14 @@ extern "C" fn nativeInjectEvent(mut env: JNIEnv, obj: JObject, input_event: JObj
                 &VOLUME_UP_PRESSED
             }
             _ => {
-                if pressed && key_code == Hachimi::instance().config.load().android.menu_open_key {
+                if pressed && key_code == Fridgerator::instance().config.load().android.menu_open_key {
                     let Some(mut gui) = Gui::instance().map(|m| m.lock().unwrap()) else {
                         return get_orig_fn!(nativeInjectEvent, NativeInjectEventFn)(env, obj, input_event, extra_param);
                     };
                     gui.toggle_menu();
                 }
-                if Hachimi::instance().config.load().hide_ingame_ui_hotkey && pressed
-                    && key_code == Hachimi::instance().config.load().android.hide_ingame_ui_hotkey_bind {
+                if Fridgerator::instance().config.load().hide_ingame_ui_hotkey && pressed
+                    && key_code == Fridgerator::instance().config.load().android.hide_ingame_ui_hotkey_bind {
                     Thread::main_thread().schedule(Gui::toggle_game_ui);
                 }
                 if Gui::is_consuming_input_atomic() {
@@ -291,7 +291,7 @@ fn init_internal() -> Result<(), Error> {
     let native_inject_event_addr = unsafe { NATIVE_INJECT_EVENT_ADDR };
     if native_inject_event_addr != 0 {
         info!("Hooking nativeInjectEvent");
-        Hachimi::instance().interceptor.hook(unsafe { NATIVE_INJECT_EVENT_ADDR }, nativeInjectEvent as usize)?;
+        Fridgerator::instance().interceptor.hook(unsafe { NATIVE_INJECT_EVENT_ADDR }, nativeInjectEvent as usize)?;
     }
     else {
         error!("native_inject_event_addr is null");

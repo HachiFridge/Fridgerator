@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::core::Hachimi;
+use crate::core::Fridgerator;
 
 use super::gui_impl::keymap;
 
@@ -12,7 +12,7 @@ pub fn is_criware_lib(filename: &str) -> bool {
     filename.ends_with("libcri_ware_unity.so")
 }
 
-pub fn on_hooking_finished(_hachimi: &Hachimi) {
+pub fn on_hooking_finished(_fridgerator: &Fridgerator) {
 }
 
 #[derive(Deserialize, Serialize, Clone)]

@@ -1,10 +1,10 @@
-use crate::{core::{template, Hachimi}, il2cpp::{ext::{Il2CppStringExt, StringExt}, symbols::get_method_addr, types::*}};
+use crate::{core::{template, Fridgerator}, il2cpp::{ext::{Il2CppStringExt, StringExt}, symbols::get_method_addr, types::*}};
 
 use super::{Localize, MasterSingleModeTurn::SingleModeTurn, TextId};
 
 type GetMonthTextByTurnFn = extern "C" fn(turn_set_id: i32, turn: i32) -> *mut Il2CppString;
 extern "C" fn GetMonthTextByTurn(turn_set_id: i32, turn: i32) -> *mut Il2CppString {
-    if let Some(format) = &Hachimi::instance().localized_data.load().config.month_text_format {
+    if let Some(format) = &Fridgerator::instance().localized_data.load().config.month_text_format {
         struct Context {
             turn: *mut Il2CppObject
         }
@@ -30,7 +30,7 @@ extern "C" fn GetMonthTextByTurn(turn_set_id: i32, turn: i32) -> *mut Il2CppStri
         }
 
         let turn = GetMasterTurn(turn_set_id, turn);
-        return Hachimi::instance().template_parser
+        return Fridgerator::instance().template_parser
             .eval_with_context(format, &mut Context { turn })
             .to_il2cpp_string()
     }

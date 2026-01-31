@@ -1,4 +1,4 @@
-use crate::{core::{Hachimi, utils::wrap_fit_text_il2cpp}, il2cpp::{api::{il2cpp_class_get_type, il2cpp_type_get_object}, ext::{Il2CppStringExt, LocalizedDataExt}, hook::UnityEngine_UI::Text, symbols::get_method_addr, types::*}};
+use crate::{core::{Fridgerator, utils::wrap_fit_text_il2cpp}, il2cpp::{api::{il2cpp_class_get_type, il2cpp_type_get_object}, ext::{Il2CppStringExt, LocalizedDataExt}, hook::UnityEngine_UI::Text, symbols::get_method_addr, types::*}};
 
 static mut TYPE_OBJECT: *mut Il2CppObject = 0 as _;
 pub fn type_object() -> *mut Il2CppObject {
@@ -9,7 +9,7 @@ type AwakeFn = extern "C" fn(this: *mut Il2CppObject);
 extern "C" fn Awake(this: *mut Il2CppObject) {
     get_orig_fn!(Awake, AwakeFn)(this);
 
-    let localized_data = Hachimi::instance().localized_data.load();
+    let localized_data = Fridgerator::instance().localized_data.load();
 
     let font = localized_data.load_replacement_font();
     if !font.is_null() {
@@ -29,7 +29,7 @@ extern "C" fn Awake(this: *mut Il2CppObject) {
 
 type SetSystemTextWithLineHeadWrapFn = extern "C" fn(this: *mut Il2CppObject, system_text: *mut CharacterSystemText, maxCharacter: i32);
 extern "C" fn SetSystemTextWithLineHeadWrap(this: *mut Il2CppObject, system_text: *mut CharacterSystemText, max_character: i32) {
-    let ld = &Hachimi::instance().localized_data.load();
+    let ld = &Fridgerator::instance().localized_data.load();
     let systext = unsafe {&*system_text};
 
     // Only process localized text so as to not possibly fuck up formatting of non-custom text.

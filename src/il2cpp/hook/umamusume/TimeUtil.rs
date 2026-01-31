@@ -2,7 +2,7 @@
 
 // TimeUtil
 use serde::{Deserialize, Serialize};
-use crate::{core::Hachimi, il2cpp::{symbols::get_method_addr, types::*}};
+use crate::{core::Fridgerator, il2cpp::{symbols::get_method_addr, types::*}};
 
 #[derive(Default, Copy, Clone, Serialize, Deserialize, Eq, PartialEq)]
 #[repr(i32)]
@@ -17,7 +17,7 @@ pub enum BgSeason {
 
 type GetSeasonForHomeFn = extern "C" fn(this: *mut Il2CppObject, dateTime: *mut Il2CppObject) -> BgSeason;
 extern "C" fn GetSeasonForHome(this: *mut Il2CppObject, dateTime: *mut Il2CppObject) -> BgSeason {
-    let bg_season = Hachimi::instance().config.load().homescreen_bgseason;
+    let bg_season = Fridgerator::instance().config.load().homescreen_bgseason;
     if bg_season != BgSeason::None {
         return bg_season;
     }

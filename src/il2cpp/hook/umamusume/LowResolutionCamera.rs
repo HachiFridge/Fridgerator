@@ -1,7 +1,7 @@
 use std::sync::atomic::{self, AtomicBool};
 
 use crate::{
-    core::{game::Region, Hachimi},
+    core::{game::Region, Fridgerator},
     il2cpp::{symbols::get_method_addr, types::*}
 };
 
@@ -36,7 +36,7 @@ pub fn init(umamusume: *const Il2CppImage) {
     let Initialize_addr = get_method_addr(LowResolutionCamera, c"Initialize", 1);
     new_hook!(Initialize_addr, Initialize);
 
-    if Hachimi::instance().game.region == Region::Japan {
+    if Fridgerator::instance().game.region == Region::Japan {
         let RemakeRendererTexture_addr = get_method_addr(LowResolutionCamera, c"RemakeRendererTexture", 0);
         new_hook!(RemakeRendererTexture_addr, RemakeRendererTexture);
     }

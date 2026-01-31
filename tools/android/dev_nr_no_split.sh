@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
-APK_EXTRACT_DIR=/tmp/hachimi-apk-extract
-TMP_BASE_APK=/tmp/hachimi-base.apk
+APK_EXTRACT_DIR=/tmp/fridgerator-apk-extract
+TMP_BASE_APK=/tmp/fridgerator-base.apk
 APK_ARM64_LIB_DIR="$APK_EXTRACT_DIR/lib/arm64-v8a"
 APK_ARM_LIB_DIR="$APK_EXTRACT_DIR/lib/armeabi-v7a"
 
@@ -60,8 +60,8 @@ if [ -d "$APK_ARM64_LIB_DIR" ]; then
         cp "$APK_ARM64_LIB_DIR/libmain.so" "$APK_ARM64_LIB_DIR/libmain_orig.so"
     fi
 
-    echo "-- [arm64] Copying Hachimi"
-    cp "./build/aarch64-linux-android/$BUILD_TYPE/libhachimi.so" "$APK_ARM64_LIB_DIR/libmain.so"
+    echo "-- [arm64] Copying Fridgerator"
+    cp "./build/aarch64-linux-android/$BUILD_TYPE/libfridgerator.so" "$APK_ARM64_LIB_DIR/libmain.so"
 fi
 
 if [ -d "$APK_ARM_LIB_DIR" ]; then
@@ -70,8 +70,8 @@ if [ -d "$APK_ARM_LIB_DIR" ]; then
         cp "$APK_ARM_LIB_DIR/libmain.so" "$APK_ARM_LIB_DIR/libmain_orig.so"
     fi
 
-    echo "-- [armv7] Copying Hachimi"
-    cp "./build/armv7-linux-androideabi/$BUILD_TYPE/libhachimi.so" "$APK_ARM_LIB_DIR/libmain.so"
+    echo "-- [armv7] Copying Fridgerator"
+    cp "./build/armv7-linux-androideabi/$BUILD_TYPE/libfridgerator.so" "$APK_ARM_LIB_DIR/libmain.so"
 fi
 
 echo "-- Repacking APK"
@@ -94,4 +94,4 @@ echo "-- Launching"
 adb shell am start-activity "$PACKAGE_NAME/$ACTIVITY_NAME"
 
 echo "-- Logcat"
-adb logcat |& grep --line-buffered Hachimi
+adb logcat |& grep --line-buffered Fridgerator

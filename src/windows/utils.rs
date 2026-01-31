@@ -15,11 +15,11 @@ use windows::{
     }
 };
 
-use crate::core::{utils::scale_to_aspect_ratio, Hachimi};
+use crate::core::{utils::scale_to_aspect_ratio, Fridgerator};
 use rust_i18n::t;
 use windows::Win32::UI::Input::KeyboardAndMouse::{self as km, VIRTUAL_KEY};
 
-use super::hachimi_impl::ResolutionScaling;
+use super::fridgerator_impl::ResolutionScaling;
 
 pub fn _get_system_directory() -> Utf16String {
     let mut buffer = [0u16; MAX_PATH as usize];
@@ -86,7 +86,7 @@ pub unsafe fn kill_process_by_name(target_name: &CStr) -> Result<(), windows::co
 
 pub fn get_tmp_installer_path() -> PathBuf {
     let mut installer_path = std::env::temp_dir();
-    installer_path.push("hachimi_installer.exe");
+    installer_path.push("fridgerator_installer.exe");
     installer_path
 }
 
@@ -94,7 +94,7 @@ pub fn get_scaling_res() -> Option<(i32, i32)> {
     use crate::il2cpp::hook::UnityEngine_CoreModule::Screen as UnityScreen;
     use crate::il2cpp::hook::umamusume::Screen as GallopScreen;
 
-    match Hachimi::instance().config.load().windows.resolution_scaling {
+    match Fridgerator::instance().config.load().windows.resolution_scaling {
         ResolutionScaling::Default => None,
         ResolutionScaling::ScaleToScreenSize => {
             let res = UnityScreen::get_currentResolution(); // screen res, not game window res
@@ -122,7 +122,7 @@ pub fn show_error(e: impl AsRef<str>) {
     error!("{}", s);
 
     let cstr = U16CString::from_str(s).unwrap();
-    unsafe { MessageBoxW(None, PCWSTR(cstr.as_ptr()), w!("Hachimi Error"), MB_ICONERROR | MB_OK); }
+    unsafe { MessageBoxW(None, PCWSTR(cstr.as_ptr()), w!("Fridgerator Error"), MB_ICONERROR | MB_OK); }
 }
 
 pub fn vk_to_display_label(vk: u16) -> String {

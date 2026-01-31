@@ -1,4 +1,4 @@
-use crate::{core::{Hachimi, game::Region}, il2cpp::{symbols::{IEnumerator, MoveNextFn, SingletonLike, get_method_addr}, types::*}};
+use crate::{core::{Fridgerator, game::Region}, il2cpp::{symbols::{IEnumerator, MoveNextFn, SingletonLike, get_method_addr}, types::*}};
 // use std::sync::atomic::{AtomicBool, Ordering};
 
 // pub static GAME_INITIALIZED: AtomicBool = AtomicBool::new(false);
@@ -20,9 +20,9 @@ impl_addr_wrapper_fn!(SoftwareReset, SOFTWARERESET_ADDR, (), this: *mut Il2CppOb
 
 // good hook for initializing values i guess
 pub fn on_game_initialized() {
-    Hachimi::instance().init_character_data();
+    Fridgerator::instance().init_character_data();
     // GAME_INITIALIZED.store(true, Ordering::Relaxed);
-    // Hachimi::instance().init_skill_data();
+    // Fridgerator::instance().init_skill_data();
     #[cfg(target_os = "windows")]
     super::UIManager::apply_ui_scale();
 }
@@ -37,7 +37,7 @@ extern "C" fn InitializeGame_MoveNext(enumerator: *mut Il2CppObject) -> bool {
 }
 
 fn InitializeGameCommon(enumerator: IEnumerator) -> IEnumerator {
-    if Hachimi::instance().config.load().ui_scale == 1.0 { return enumerator; }
+    if Fridgerator::instance().config.load().ui_scale == 1.0 { return enumerator; }
 
     if let Err(e) = enumerator.hook_move_next(InitializeGame_MoveNext) {
         error!("Failed to hook InitializeGame enumerator: {}", e);
@@ -61,7 +61,7 @@ extern "C" fn InitializeGameOther(this: *mut Il2CppObject) -> IEnumerator {
 pub fn init(umamusume: *const Il2CppImage) {
     get_class_or_return!(umamusume, Gallop, GameSystem);
 
-    if Hachimi::instance().game.region == Region::Japan {
+    if Fridgerator::instance().game.region == Region::Japan {
         let InitializeGame_addr = get_method_addr(GameSystem, c"InitializeGame", 1);
         new_hook!(InitializeGame_addr, InitializeGameJp);
     }

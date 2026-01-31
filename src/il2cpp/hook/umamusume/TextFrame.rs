@@ -3,7 +3,7 @@ use std::{collections::hash_map, sync::Mutex};
 use fnv::FnvHashMap;
 use once_cell::sync::Lazy;
 
-use crate::{core::Hachimi, il2cpp::{hook::UnityEngine_UI::Text, symbols::{get_method_addr, GCHandle}, types::*}};
+use crate::{core::Fridgerator, il2cpp::{hook::UnityEngine_UI::Text, symbols::{get_method_addr, GCHandle}, types::*}};
 
 static mut GET_TEXTLABEL_ADDR: usize = 0;
 impl_addr_wrapper_fn!(get_TextLabel, GET_TEXTLABEL_ADDR, *mut Il2CppObject, this: *mut Il2CppObject);
@@ -22,7 +22,7 @@ extern "C" fn Initialize(this: *mut Il2CppObject) {
     }
 
     let text_label = get_TextLabel(this);
-    let localized_data = Hachimi::instance().localized_data.load();
+    let localized_data = Fridgerator::instance().localized_data.load();
 
     if let Some(mult) = localized_data.config.text_frame_line_spacing_multiplier {
         let line_spacing = Text::get_lineSpacing(text_label);

@@ -1,10 +1,10 @@
-use crate::{core::{game::Region, Hachimi}, il2cpp::{symbols::get_method_addr, types::*}};
+use crate::{core::{game::Region, Fridgerator}, il2cpp::{symbols::get_method_addr, types::*}};
 
 use super::{ApplicationSettingSaveLoader, SaveDataManager};
 
 type GetRaceDynamicCameraSettingDataFn = extern "C" fn(boot_mode: *mut Il2CppObject) -> bool;
 extern "C" fn GetRaceDynamicCameraSettingData(boot_mode: *mut Il2CppObject) -> bool {
-    if Hachimi::instance().config.load().force_allow_dynamic_camera {
+    if Fridgerator::instance().config.load().force_allow_dynamic_camera {
         let save_data_manager = SaveDataManager::instance();
         if save_data_manager.is_null() { return false; }
 
@@ -19,7 +19,7 @@ extern "C" fn GetRaceDynamicCameraSettingData(boot_mode: *mut Il2CppObject) -> b
 }
 
 pub fn init(umamusume: *const Il2CppImage) {
-    if Hachimi::instance().game.region != Region::Japan {
+    if Fridgerator::instance().game.region != Region::Japan {
         return;
     }
 

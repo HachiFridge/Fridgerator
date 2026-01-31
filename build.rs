@@ -53,7 +53,7 @@ fn setup_version_env() {
         println!("cargo:warning=Failed to execute git. Is git installed?");
     }
 
-    println!("cargo:rustc-env=HACHIMI_DISPLAY_VERSION={}", version_str);
+    println!("cargo:rustc-env=FRIDGERATOR_DISPLAY_VERSION={}", version_str);
 }
 
 fn main() {

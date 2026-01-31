@@ -5,7 +5,7 @@ use serde::Deserialize;
 use widestring::Utf16Str;
 
 use crate::{
-    core::{ext::Utf16StringExt, hachimi::AssetInfo, Hachimi},
+    core::{ext::Utf16StringExt, fridgerator::AssetInfo, Fridgerator},
     il2cpp::{
         api::{il2cpp_class_get_type, il2cpp_type_get_object}, ext::{Il2CppStringExt, StringExt}, hook::{UnityEngine_AssetBundleModule::AssetBundle, UnityEngine_CoreModule::Object}, symbols::{get_field_from_name, get_field_object_value, IList}, types::*, utils::replace_texture_with_diff
     }
@@ -76,7 +76,7 @@ pub fn on_LoadAsset(bundle: *mut Il2CppObject, this: *mut Il2CppObject, name: &U
     // SAFETY: The asset path has been checked prior to this being called in GameObject::on_LoadAsset
     let base_path = name[AssetBundle::ASSET_PATH_PREFIX.len()..].path_basename();
 
-    let localized_data = Hachimi::instance().localized_data.load();
+    let localized_data = Fridgerator::instance().localized_data.load();
     let asset_info: AssetInfo<AnRootData> = localized_data.load_asset_info(&base_path.to_string());
     if !AssetBundle::check_asset_bundle_name(bundle, asset_info.metadata_ref()) {
         return;
@@ -92,7 +92,7 @@ pub fn patch_asset(this: *mut Il2CppObject, data_opt: Option<&AnRootData>) {
         return;
     };
 
-    let localized_data = Hachimi::instance().localized_data.load();
+    let localized_data = Fridgerator::instance().localized_data.load();
     for param in param_list.iter() {
         let Some(group_list) = IList::new(AnMeshParameter::get__meshParameterGroupList(param)) else {
             return;

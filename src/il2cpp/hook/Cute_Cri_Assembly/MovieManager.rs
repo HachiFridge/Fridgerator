@@ -1,6 +1,6 @@
 use std::path::Path;
 
-use crate::{core::Hachimi, il2cpp::{ext::{Il2CppStringExt, StringExt}, symbols::get_method_addr, types::*}};
+use crate::{core::Fridgerator, il2cpp::{ext::{Il2CppStringExt, StringExt}, symbols::get_method_addr, types::*}};
 
 type GetMovieFilePathFn = extern "C" fn(this: *mut Il2CppObject, movie_file: *mut Il2CppString) -> *mut Il2CppString;
 extern "C" fn GetMovieFilePath(this: *mut Il2CppObject, movie_file: *mut Il2CppString) -> *mut Il2CppString {
@@ -10,7 +10,7 @@ extern "C" fn GetMovieFilePath(this: *mut Il2CppObject, movie_file: *mut Il2CppS
     let mut rel_replace_path = Path::new("movies").join(movie_file_str.to_ascii_lowercase());
     rel_replace_path.set_extension("usm");
 
-    let localized_data = Hachimi::instance().localized_data.load();
+    let localized_data = Fridgerator::instance().localized_data.load();
     let Some(replace_path) = localized_data.get_assets_path(&rel_replace_path) else {
         return orig_fn(this, movie_file);
     };

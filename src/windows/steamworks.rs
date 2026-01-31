@@ -4,7 +4,7 @@ use std::{os::raw::c_void, ptr::NonNull};
 
 use windows::Win32::Foundation::HMODULE;
 
-use crate::{core::Hachimi, windows::utils};
+use crate::{core::Fridgerator, windows::utils};
 
 static mut SteamAPI_SteamUtils_v010_addr: usize = 0;
 static mut SteamAPI_ISteamUtils_IsOverlayEnabled_addr: usize = 0;
@@ -44,13 +44,13 @@ fn is_using_overlay() -> bool {
     std::env::var("SteamOverlayGameId").is_ok()
 }
 
-pub fn is_overlay_conflicting(hachimi: &Hachimi) -> bool {
+pub fn is_overlay_conflicting(fridgerator: &Fridgerator) -> bool {
     if SteamUtils::get().is_some_and(|u| u.is_overlay_enabled()) {
-        // overlay has successfully initialized and is not conflicting with Hachimi
+        // overlay has successfully initialized and is not conflicting with Fridgerator
         return false;
     }
 
-    if !hachimi.game.is_steam_release || hachimi.config.load().disable_gui {
+    if !fridgerator.game.is_steam_release || fridgerator.config.load().disable_gui {
         return false;
     }
 

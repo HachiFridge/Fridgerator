@@ -2,7 +2,7 @@ use std::{ffi::CStr, os::raw::c_void};
 use jni::{sys::jint, JavaVM};
 use once_cell::sync::OnceCell;
 
-use crate::core::Hachimi;
+use crate::core::Fridgerator;
 
 use super::{hook, plugin_loader};
 
@@ -27,14 +27,14 @@ pub extern "C" fn JNI_OnLoad(vm: JavaVM, reserved: *mut c_void) -> jint {
         orig_fn = std::mem::transmute(libc::dlsym(handle, JNI_ONLOAD_NAME.as_ptr()));
     }
 
-    if !Hachimi::init() {
+    if !Fridgerator::init() {
         return orig_fn(vm, reserved);
     }
     let vm_ptr = vm.get_java_vm_pointer();
     let vm_for_env = unsafe { JavaVM::from_raw(vm_ptr).unwrap() };
     let _ = JAVA_VM.set(vm);
-    let hachimi = Hachimi::instance();
-    *hachimi.plugins.lock().unwrap() = plugin_loader::load_libraries();
+    let fridgerator = Fridgerator::instance();
+    *fridgerator.plugins.lock().unwrap() = plugin_loader::load_libraries();
     let env = vm_for_env.get_env().unwrap();
     hook::init(env.get_raw());
 

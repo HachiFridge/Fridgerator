@@ -1,11 +1,11 @@
 use crate::{
-    core::Hachimi,
+    core::Fridgerator,
     il2cpp::{symbols::get_method_addr, types::*}
 };
 
 type GetSingCharaIdListFn = extern "C" fn(songId: i32, songPartNumber: i32, allCharaIdArray: *mut Il2CppArray, vocalCharaIdArray: *mut Il2CppArray, shuffledCharaDataList: *mut Il2CppObject) -> *mut Il2CppObject;
 extern "C" fn GetSingCharaIdList(songId: i32, songPartNumber: i32, allCharaIdArray: *mut Il2CppArray, vocalCharaIdArray: *mut Il2CppArray, shuffledCharaDataList: *mut Il2CppObject) -> *mut Il2CppObject {
-    let chara_vo_ids = &Hachimi::instance().config.load().live_vocals_swap;
+    let chara_vo_ids = &Fridgerator::instance().config.load().live_vocals_swap;
 
     if songId > 0 {
         unsafe {

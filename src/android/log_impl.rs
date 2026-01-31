@@ -5,7 +5,7 @@ use std::fs::File;
 pub fn init(filter_level: log::LevelFilter, file_logging: bool) {
     if file_logging {
         let mut path = super::utils::get_game_dir();
-        path.push("hachimi.log");
+        path.push("fridgerator.log");
 
         if let Ok(file) = File::create(path) {
             let config = ConfigBuilder::new()
@@ -29,6 +29,6 @@ pub fn init(filter_level: log::LevelFilter, file_logging: bool) {
                     .filter_module("sqlparser", log::LevelFilter::Off) // annoying
                     .build()
             )
-            .with_tag("Hachimi")
+            .with_tag("Fridgerator")
     );
 }

@@ -1,10 +1,10 @@
 use std::sync::atomic;
 
-use crate::{core::Hachimi, il2cpp::{api::il2cpp_resolve_icall, symbols::get_method_addr, types::*}};
+use crate::{core::Fridgerator, il2cpp::{api::il2cpp_resolve_icall, symbols::get_method_addr, types::*}};
 
 type SetTargetFrameRateFn = extern "C" fn(value: i32);
 pub extern "C" fn set_targetFrameRate(mut value: i32) {
-    let target_fps = Hachimi::instance().target_fps.load(atomic::Ordering::Relaxed);
+    let target_fps = Fridgerator::instance().target_fps.load(atomic::Ordering::Relaxed);
     if target_fps != -1 {
         value = target_fps;
     }

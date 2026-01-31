@@ -2,7 +2,7 @@ use serde::Deserialize;
 use widestring::Utf16Str;
 
 use crate::{
-    core::{ext::Utf16StringExt, hachimi::AssetInfo, Hachimi},
+    core::{ext::Utf16StringExt, fridgerator::AssetInfo, Fridgerator},
     il2cpp::{
         api::{il2cpp_class_get_type, il2cpp_type_get_object},
         hook::{
@@ -34,7 +34,7 @@ pub fn on_LoadAsset(bundle: *mut Il2CppObject, this: *mut Il2CppObject, name: &U
     // SAFETY: The asset path has been checked prior to this being called in GameObject::on_LoadAsset
     let base_path = name[AssetBundle::ASSET_PATH_PREFIX.len()..].path_basename();
 
-    let localized_data = Hachimi::instance().localized_data.load();
+    let localized_data = Fridgerator::instance().localized_data.load();
     let asset_info: AssetInfo<FlashActionPlayerData> = localized_data.load_asset_info(&base_path.to_string());
     if !AssetBundle::check_asset_bundle_name(bundle, asset_info.metadata_ref()) {
         return;

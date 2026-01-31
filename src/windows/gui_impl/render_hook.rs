@@ -22,7 +22,7 @@ use windows::{
     }
 };
 
-use crate::{core::{Error, Gui, Hachimi, Interceptor}, windows::wnd_hook};
+use crate::{core::{Error, Gui, Fridgerator, Interceptor}, windows::wnd_hook};
 
 use super::d3d11_painter::D3D11Painter;
 
@@ -63,7 +63,7 @@ extern "C" fn IDXGISwapChain_Present(this: *mut c_void, sync_interval: c_uint, f
             info!("Unhooking IDXGISwapChain hooks");
 
             let res = orig_fn(this, sync_interval, flags);
-            let interceptor = &Hachimi::instance().interceptor;
+            let interceptor = &Fridgerator::instance().interceptor;
             interceptor.unhook(IDXGISwapChain_Present as *const () as usize);
             interceptor.unhook(IDXGISwapChain_ResizeBuffers as *const () as usize);
             return res;
@@ -137,7 +137,7 @@ extern "C" fn IDXGISwapChain_ResizeBuffers(
             error!("{}", e);
             info!("Unhooking IDXGISwapChain hooks");
 
-            let interceptor = &Hachimi::instance().interceptor;
+            let interceptor = &Fridgerator::instance().interceptor;
             interceptor.unhook(IDXGISwapChain_Present as *const () as usize);
             interceptor.unhook(IDXGISwapChain_ResizeBuffers as *const () as usize);
             return orig_fn(this, buffer_count, width, height, new_format, swap_chain_flags);
@@ -178,7 +178,7 @@ fn get_swap_chain_vtable() -> Result<*mut usize, Error> {
     let mut wc = WNDCLASSEXW::default();
     wc.cbSize = std::mem::size_of::<WNDCLASSEXW>() as u32;
     wc.lpfnWndProc = Some(dummy_wnd_proc);
-    wc.lpszClassName = w!("Hachimi");
+    wc.lpszClassName = w!("Fridgerator");
 
     if unsafe { RegisterClassExW(&wc) } == 0 {
         return Err(Error::RuntimeError("Failed to register dummy window class".to_owned()));
@@ -237,7 +237,7 @@ fn get_swap_chain_vtable() -> Result<*mut usize, Error> {
 
 fn init_internal() -> Result<(), Error> {
     let swap_chain_vtable = get_swap_chain_vtable()?;
-    let interceptor = &Hachimi::instance().interceptor;
+    let interceptor = &Fridgerator::instance().interceptor;
 
     unsafe {
         info!("Hooking IDXGISwapChain::Present");

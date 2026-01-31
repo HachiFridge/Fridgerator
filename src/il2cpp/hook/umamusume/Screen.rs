@@ -1,7 +1,7 @@
 use crate::il2cpp::{symbols::get_method_addr, types::*};
 
 #[cfg(target_os = "android")]
-use crate::core::Hachimi;
+use crate::core::Fridgerator;
 
 #[cfg(target_os = "android")]
 extern "C" fn ChangeScreenOrientationLandscapeAsync_MoveNext(enumerator: *mut Il2CppObject) -> bool {
@@ -28,7 +28,7 @@ type ChangeScreenOrientationLandscapeAsyncFn = extern "C" fn() -> crate::il2cpp:
 #[cfg(target_os = "android")]
 extern "C" fn ChangeScreenOrientationLandscapeAsync() -> crate::il2cpp::symbols::IEnumerator {
     let enumerator = get_orig_fn!(ChangeScreenOrientationLandscapeAsync, ChangeScreenOrientationLandscapeAsyncFn)();
-    if Hachimi::instance().config.load().ui_scale == 1.0 { return enumerator; }
+    if Fridgerator::instance().config.load().ui_scale == 1.0 { return enumerator; }
 
     if let Err(e) = enumerator.hook_move_next(ChangeScreenOrientationLandscapeAsync_MoveNext) {
         error!("Failed to hook enumerator: {}", e);
@@ -42,7 +42,7 @@ type ChangeScreenOrientationPortraitAsyncFn = extern "C" fn() -> crate::il2cpp::
 #[cfg(target_os = "android")]
 extern "C" fn ChangeScreenOrientationPortraitAsync() -> crate::il2cpp::symbols::IEnumerator {
     let enumerator = get_orig_fn!(ChangeScreenOrientationPortraitAsync, ChangeScreenOrientationPortraitAsyncFn)();
-    if Hachimi::instance().config.load().ui_scale == 1.0 { return enumerator; }
+    if Fridgerator::instance().config.load().ui_scale == 1.0 { return enumerator; }
 
     if let Err(e) = enumerator.hook_move_next(ChangeScreenOrientationPortraitAsync_MoveNext) {
         error!("Failed to hook enumerator: {}", e);

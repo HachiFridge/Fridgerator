@@ -1,11 +1,11 @@
 [package]
-name = "hachimi"
+name = "fridgerator"
 version = "0.22.0"
 rust-version = "1.91.1"
 edition = "2021"
 
 [lib]
-name = "hachimi"
+name = "fridgerator"
 crate-type = ["cdylib"]
 
 [profile.release]
@@ -29,7 +29,9 @@ fnv = "1.0"
 widestring = "1.1"
 egui = { version = "0.33.3", default-features = false }
 egui-scale = "0.3.0"
-egui_extras = { version = "0.33.3", default-features = false, features = ["image"] }
+egui_extras = { version = "0.33.3", default-features = false, features = [
+    "image",
+] }
 image = { version = "0.25.9", default-features = false, features = ["png"] }
 png = "0.17"
 sqlparser = "0.43"
@@ -81,7 +83,7 @@ features = [
     "Win32_UI_Shell",
     "Win32_Graphics_Dxgi",
     "Win32_Storage_FileSystem",
-    "Win32_Graphics_Gdi"
+    "Win32_Graphics_Gdi",
 ]
 
 [build-dependencies]
@@ -89,7 +91,7 @@ tauri-winres = "0.1"
 cc = "1.1"
 
 [package.metadata.tauri-winres]
-ProductName = "Hachimi"
+ProductName = "Fridgerator"
 FileDescription = "Game enhancement and translation mod"
 
 [patch.crates-io]

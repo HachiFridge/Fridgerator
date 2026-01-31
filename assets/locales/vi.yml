@@ -1,4 +1,4 @@
-hachimi: "Hachimi Edge"
+fridgerator: "Fridgerator"
 
 windows:
   menu_open_key: "Mũi tên phải"
@@ -75,7 +75,7 @@ first_time_setup:
   title: "Thiết lập lần đầu"
   welcome_heading: "Chào mừng"
   welcome_content: >-
-    Hachimi đã được cài đặt! Phần này sẽ hướng dẫn bạn qua quá trình cài đặt ban đầu.
+    Fridgerator đã được cài đặt! Phần này sẽ hướng dẫn bạn qua quá trình cài đặt ban đầu.
     Nếu bạn không quan tâm đến các tính năng dịch, bạn có thể bỏ qua bằng cách đóng hộp thoại này.
   translation_repo_heading: "Bản dịch"
   select_translation_repo: "Chọn một bản dịch:"
@@ -106,7 +106,7 @@ config_editor:
   language: "Ngôn ngữ"
   disable_overlay: "Tắt overlay (GUI)"
   disable_overlay_warning: >-
-    Tùy chọn này sẽ tắt GUI của Hachimi sau khi bạn khởi động lại game,
+    Tùy chọn này sẽ tắt GUI của Fridgerator sau khi bạn khởi động lại game,
     nghĩa là bạn sẽ KHÔNG thể truy cập trình chỉnh sửa cài đặt nữa.
     Nếu như bạn không có ý định này, hãy đóng hộp thoại và TẮT tùy chọn.
   meta_index_url: "URL Meta bản dịch"
@@ -164,7 +164,7 @@ tl_update_dialog:
 update_prompt_dialog:
   title: "Bản cập nhật mới"
   content: |
-    Đã có phiên bản Hachimi mới (%{version}). Bạn có muốn cài đặt không?
+    Đã có phiên bản Fridgerator mới (%{version}). Bạn có muốn cài đặt không?
     Game sẽ được khởi động lại để áp dụng bản cập nhật.
 
 updating_dialog:

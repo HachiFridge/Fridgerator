@@ -1,5 +1,5 @@
-pub mod hachimi;
-pub use hachimi::Hachimi;
+pub mod fridgerator;
+pub use fridgerator::Fridgerator;
 
 mod error;
 pub use error::Error;

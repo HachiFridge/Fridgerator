@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 
-use crate::{core::Hachimi, il2cpp::{api::il2cpp_resolve_icall, types::*}};
+use crate::{core::Fridgerator, il2cpp::{api::il2cpp_resolve_icall, types::*}};
 
 // only bilinear is used in stock game
 #[allow(dead_code)]
@@ -33,7 +33,7 @@ impl_addr_wrapper_fn!(SetAnisoLevel, SETANISOLEVEL_ADDR, (), this: *mut Il2CppOb
 #[allow(non_camel_case_types)]
 type set_filterModeFn = extern "C" fn(this: *mut Il2CppObject, filterMode: FilterMode);
 extern "C" fn set_filterMode(this: *mut Il2CppObject, filterMode: FilterMode) {
-    let level = Hachimi::instance().config.load().aniso_level;
+    let level = Fridgerator::instance().config.load().aniso_level;
     if level == AnisoLevel::Default {
         return get_orig_fn!(set_filterMode, set_filterModeFn)(this, filterMode);
     }

@@ -3,7 +3,7 @@ use std::sync::Arc;
 use once_cell::sync::Lazy;
 use serde::Serialize;
 
-use super::{Error, Hachimi};
+use super::{Error, Fridgerator};
 
 pub struct SugoiClient {
     agent: ureq::Agent,
@@ -13,7 +13,7 @@ pub struct SugoiClient {
 static INSTANCE: Lazy<Arc<SugoiClient>> = Lazy::new(|| {
     Arc::new(SugoiClient {
         agent: ureq::Agent::new(),
-        url: Hachimi::instance().config.load().sugoi_url.as_ref()
+        url: Fridgerator::instance().config.load().sugoi_url.as_ref()
             .map(|s| s.clone())
             .unwrap_or_else(|| "http://127.0.0.1:14366".to_owned())
     })

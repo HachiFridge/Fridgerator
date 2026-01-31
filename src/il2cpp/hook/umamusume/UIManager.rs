@@ -1,5 +1,5 @@
 use crate::{
-    core::Hachimi,
+    core::Fridgerator,
     il2cpp::{
         ext::{Il2CppStringExt, StringExt}, hook::UnityEngine_UI::CanvasScaler, symbols::{get_method_addr, get_method_overload_addr, Array, SingletonLike}, types::*
     }
@@ -21,7 +21,7 @@ static mut GETCANVASSCALERLIST_ADDR: usize = 0;
 impl_addr_wrapper_fn!(GetCanvasScalerList, GETCANVASSCALERLIST_ADDR, Array, this: *mut Il2CppObject);
 
 pub fn apply_ui_scale() {
-    let config = Hachimi::instance().config.load();
+    let config = Fridgerator::instance().config.load();
 
     #[allow(unused_mut)]
     let mut scale = config.ui_scale;
@@ -62,7 +62,7 @@ extern "C" fn SetHeaderTitleText(this: *mut Il2CppObject, text_: *mut Il2CppStri
     // The title text (aka the purple ribbon on the top left of the screen) doesn't run
     // through TextGenerator, so we have to evaluate templates here (by emptying any filter exprs)
     let new_text = if text.as_slice().contains(&36) { // 36 = dollar sign ($)
-        Hachimi::instance().template_parser
+        Fridgerator::instance().template_parser
             .remove_filters(&text.to_string())
             .to_il2cpp_string()
     }
@@ -81,7 +81,7 @@ extern "C" fn ChangeResizeUIForPC(this: *mut Il2CppObject, width: i32, height: i
 
     get_orig_fn!(ChangeResizeUIForPC, ChangeResizeUIForPCFn)(this, width, height);
     // Recreate the render texture so it scales with the resolution
-    if Hachimi::instance().config.load().windows.resolution_scaling.is_not_default() {
+    if Fridgerator::instance().config.load().windows.resolution_scaling.is_not_default() {
         CreateRenderTextureFromScreen(this);
         GraphicSettings::Update3DRenderTexture(GraphicSettings::instance());
     }
@@ -103,7 +103,7 @@ type WaitBootSetupFn = extern "C" fn(this: *mut Il2CppObject) -> crate::il2cpp::
 #[cfg(target_os = "android")]
 extern "C" fn WaitBootSetup(this: *mut Il2CppObject) -> crate::il2cpp::symbols::IEnumerator {
     let enumerator = get_orig_fn!(WaitBootSetup, WaitBootSetupFn)(this);
-    if Hachimi::instance().config.load().ui_scale == 1.0 { return enumerator; }
+    if Fridgerator::instance().config.load().ui_scale == 1.0 { return enumerator; }
 
     if let Err(e) = enumerator.hook_move_next(WaitBootSetup_MoveNext) {
         error!("Failed to hook enumerator: {}", e);

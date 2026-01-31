@@ -30,7 +30,7 @@ pub fn get_data_dir(package_name: &str) -> PathBuf {
     Path::new(package_name)
         .parent()
         .unwrap()
-        .join("hachimi")
+        .join("fridgerator")
 }
 
 

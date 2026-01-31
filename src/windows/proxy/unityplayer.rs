@@ -5,13 +5,13 @@ use std::path::PathBuf;
 use widestring::U16CString;
 use windows::{core::PCWSTR, Win32::System::LibraryLoader::LoadLibraryW};
 
-use crate::{core::{utils::get_file_modified_time, Hachimi}, windows::utils};
+use crate::{core::{utils::get_file_modified_time, Fridgerator}, windows::utils};
 
 proxy_proc!(UnityMain, UnityMain_orig);
 
 fn prepare_orig_dll() -> std::io::Result<PathBuf> {
     let src_dll = utils::get_game_dir().join("UnityPlayer.dll");
-    let dest_dll = Hachimi::instance().get_data_path("UnityPlayer_orig.dll");
+    let dest_dll = Fridgerator::instance().get_data_path("UnityPlayer_orig.dll");
 
     if let Some(dest_mtime) = get_file_modified_time(&dest_dll) {
         if let Some(src_mtime) = get_file_modified_time(&src_dll) {

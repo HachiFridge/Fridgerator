@@ -3,7 +3,7 @@ use std::sync::atomic;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    core::Hachimi,
+    core::Fridgerator,
     il2cpp::{
         hook::UnityEngine_CoreModule::{
             FullScreenMode_ExclusiveFullScreen, FullScreenMode_FullScreenWindow,
@@ -22,7 +22,7 @@ pub fn is_criware_lib(filename: &str) -> bool {
     filename == "cri_ware_unity.dll"
 }
 
-pub fn on_hooking_finished(hachimi: &Hachimi) {
+pub fn on_hooking_finished(fridgerator: &Fridgerator) {
     wnd_hook::init();
 
     // Kill unity crash handler (just to be safe)
@@ -33,12 +33,12 @@ pub fn on_hooking_finished(hachimi: &Hachimi) {
     };
 
     // Apply vsync
-    if hachimi.vsync_count.load(atomic::Ordering::Relaxed) != -1 {
+    if fridgerator.vsync_count.load(atomic::Ordering::Relaxed) != -1 {
         QualitySettings::set_vSyncCount(1);
     }
 
     // Apply auto full screen
-    if hachimi.config.load().windows.auto_full_screen {
+    if fridgerator.config.load().windows.auto_full_screen {
         std::thread::spawn(|| {
             std::thread::sleep(std::time::Duration::from_secs(2));
             Thread::main_thread().schedule(|| {

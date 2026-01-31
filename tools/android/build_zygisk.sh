@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
-SONAME=hachimi
-MODID=hachimi
-MODNAME=Hachimi
+SONAME=fridgerator
+MODID=fridgerator
+MODNAME=Fridgerator
 AUTHOR=LeadRDRK
 DESC="はちみーをなめると〜"
 UPDATEJSON=

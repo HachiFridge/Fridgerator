@@ -4,7 +4,7 @@ use fnv::FnvHashMap;
 use once_cell::unsync::Lazy;
 
 use crate::{
-    core::{utils, Hachimi, SugoiClient},
+    core::{utils, Fridgerator, SugoiClient},
     il2cpp::{ext::{Il2CppStringExt, StringExt}, symbols::{get_method_overload_addr, unbox}, types::*}
 };
 
@@ -23,8 +23,8 @@ static mut TEXTID_NAME_CACHE: Lazy<FnvHashMap<i32, String>> = Lazy::new(|| FnvHa
  */
 type GetFn = extern "C" fn(id: i32) -> *mut Il2CppString;
 pub extern "C" fn Get(id: i32) -> *mut Il2CppString {
-    let hachimi = Hachimi::instance();
-    let localized_data = hachimi.localized_data.load();
+    let fridgerator = Fridgerator::instance();
+    let localized_data = fridgerator.localized_data.load();
     if localized_data.localize_dict.is_empty() {
         return get_orig_fn!(Get, GetFn)(id);
     }
@@ -43,11 +43,11 @@ pub extern "C" fn Get(id: i32) -> *mut Il2CppString {
     }
     else {
         let str = get_orig_fn!(Get, GetFn)(id);
-        if Hachimi::instance().config.load().translator_mode && id != 1109 && id != 1032 {
+        if Fridgerator::instance().config.load().translator_mode && id != 1109 && id != 1032 {
             // 1109 and 1032 seems to be debugging strings (they're annoying)
             utils::print_json_entry(name, unsafe { &(*str).as_utf16str().to_string() });
         }
-        if hachimi.config.load().auto_translate_localize && !str.is_null() && unsafe { (*str).length > 0 } {
+        if fridgerator.config.load().auto_translate_localize && !str.is_null() && unsafe { (*str).length > 0 } {
             let s = unsafe { (*str).as_utf16str().to_string() };
             if let Ok(res) = SugoiClient::instance().translate_one(s) {
                 return res.to_il2cpp_string();

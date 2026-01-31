@@ -2,7 +2,7 @@
 SKIPUNZIP=1
 
 DEBUG=false
-SONAME=hachimi
+SONAME=fridgerator
 SUPPORTED_ABIS="arm64 arm x86 x64"
 
 if [ "$BOOTMODE" ] && [ "$KSU" ]; then

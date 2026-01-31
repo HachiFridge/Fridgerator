@@ -3,7 +3,7 @@ use std::os::raw::{c_ulong, c_void};
 use widestring::U16CString;
 use windows::{core::PCWSTR, Win32::{Foundation::{HMODULE, TRUE}, System::LibraryLoader::LoadLibraryW}};
 
-use crate::{core::{plugin_api::Plugin, Hachimi}, windows::utils};
+use crate::{core::{plugin_api::Plugin, Fridgerator}, windows::utils};
 
 use super::{hook, wnd_hook};
 
@@ -12,7 +12,7 @@ const DLL_PROCESS_DETACH: c_ulong = 0;
 
 pub fn load_libraries() -> Vec<Plugin> {
     let mut plugins = Vec::new();
-    for name in Hachimi::instance().config.load().windows.load_libraries.iter() {
+    for name in Fridgerator::instance().config.load().windows.load_libraries.iter() {
         let Ok(name_cstr) = U16CString::from_str(name) else {
             warn!("Invalid library name: {}", name);
             continue;
@@ -23,11 +23,11 @@ pub fn load_libraries() -> Vec<Plugin> {
             if !handle.is_invalid() {
                 info!("Loaded library: {}", name);
 
-                let hachimi_init_addr = utils::get_proc_address(handle, c"hachimi_init");
-                if hachimi_init_addr != 0 {
+                let fridgerator_init_addr = utils::get_proc_address(handle, c"fridgerator_init");
+                if fridgerator_init_addr != 0 {
                     plugins.push(Plugin {
                         name: name.clone(),
-                        init_fn: unsafe { std::mem::transmute(hachimi_init_addr) }
+                        init_fn: unsafe { std::mem::transmute(fridgerator_init_addr) }
                     });
                 }
 
@@ -48,21 +48,21 @@ pub static mut DLL_HMODULE: HMODULE = HMODULE(0 as _);
 pub extern "C" fn DllMain(hmodule: HMODULE, call_reason: c_ulong, _reserved: *mut c_void) -> bool {
     if call_reason == DLL_PROCESS_ATTACH {
         unsafe { DLL_HMODULE = hmodule; }
-        if !Hachimi::init() {
+        if !Fridgerator::init() {
             return TRUE.into();
         }
 
-        let hachimi = Hachimi::instance();
-        *hachimi.plugins.lock().unwrap() = load_libraries();
+        let fridgerator = Fridgerator::instance();
+        *fridgerator.plugins.lock().unwrap() = load_libraries();
 
         hook::init();
         info!("Attach completed");
     }
-    else if call_reason == DLL_PROCESS_DETACH && Hachimi::is_initialized() {
+    else if call_reason == DLL_PROCESS_DETACH && Fridgerator::is_initialized() {
         wnd_hook::uninit();
 
         info!("Unhooking everything");
-        Hachimi::instance().interceptor.unhook_all();
+        Fridgerator::instance().interceptor.unhook_all();
     }
     TRUE.into()
 }

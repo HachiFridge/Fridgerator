@@ -1,6 +1,6 @@
 use std::ops::Not;
 
-use crate::{core::{template, Hachimi}, il2cpp::{ext::{Il2CppStringExt, StringExt}, symbols::get_method_addr, types::*}};
+use crate::{core::{template, Fridgerator}, il2cpp::{ext::{Il2CppStringExt, StringExt}, symbols::get_method_addr, types::*}};
 
 type PopulateWithErrorsFn = extern "C" fn(
     this: *mut Il2CppObject, str: *mut Il2CppString,
@@ -11,7 +11,7 @@ extern "C" fn PopulateWithErrors(
     mut settings: TextGenerationSettings_t, context: *mut Il2CppObject
 ) -> bool {
     let orig_fn = get_orig_fn!(PopulateWithErrors, PopulateWithErrorsFn);
-    let localized_data = &Hachimi::instance().localized_data.load();
+    let localized_data = &Fridgerator::instance().localized_data.load();
     let hashed_dict = &localized_data.hashed_dict;
 
     let mut new_str: Option<&String> = None;
@@ -42,7 +42,7 @@ extern "C" fn PopulateWithErrors(
             let mut template_context = TemplateContext {
                 settings: &mut settings
             };
-            let tpl_text = &Hachimi::instance().template_parser.eval_with_context(text, &mut template_context);
+            let tpl_text = &Fridgerator::instance().template_parser.eval_with_context(text, &mut template_context);
             orig_fn(this, tpl_text.to_il2cpp_string(), settings, context)
         }
         else {

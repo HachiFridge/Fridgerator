@@ -3,13 +3,13 @@ use std::ffi::{c_char, c_void, CStr};
 use once_cell::sync::OnceCell;
 use egui::Align;
 
-use crate::{core::{gui, Hachimi, Interceptor}, il2cpp::{self, types::{il2cpp_array_size_t, FieldInfo, Il2CppArray, Il2CppClass, Il2CppImage, Il2CppObject, Il2CppThread, Il2CppTypeEnum, MethodInfo}}};
+use crate::{core::{gui, Fridgerator, Interceptor}, il2cpp::{self, types::{il2cpp_array_size_t, FieldInfo, Il2CppArray, Il2CppClass, Il2CppImage, Il2CppObject, Il2CppThread, Il2CppTypeEnum, MethodInfo}}};
 
 const VERSION: i32 = 2;
 
 static PLUGIN_VTABLE: OnceCell<Vtable> = OnceCell::new();
 
-pub type HachimiInitFn = extern "C" fn(vtable: *const Vtable, version: i32) -> InitResult;
+pub type FridgeratorInitFn = extern "C" fn(vtable: *const Vtable, version: i32) -> InitResult;
 pub type GuiMenuCallback = extern "C" fn(userdata: *mut c_void);
 pub type GuiMenuSectionCallback = extern "C" fn(ui: *mut c_void, userdata: *mut c_void);
 pub type GuiUiCallback = extern "C" fn(ui: *mut c_void, userdata: *mut c_void);
@@ -30,11 +30,11 @@ impl InitResult {
     }
 }
 
-unsafe extern "C" fn hachimi_instance() -> *const Hachimi {
-    Hachimi::instance().as_ref()
+unsafe extern "C" fn fridgerator_instance() -> *const Fridgerator {
+    Fridgerator::instance().as_ref()
 }
 
-unsafe extern "C" fn hachimi_get_interceptor(this: *const Hachimi) -> *const Interceptor {
+unsafe extern "C" fn fridgerator_get_interceptor(this: *const Fridgerator) -> *const Interceptor {
     &(*this).interceptor
 }
 
@@ -504,8 +504,8 @@ unsafe extern "C" fn android_dex_call_static_string(_handle: u64, _method: *cons
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct Vtable {
-    pub hachimi_instance: unsafe extern "C" fn() -> *const Hachimi,
-    pub hachimi_get_interceptor: unsafe extern "C" fn(this: *const Hachimi) -> *const Interceptor,
+    pub fridgerator_instance: unsafe extern "C" fn() -> *const Fridgerator,
+    pub fridgerator_get_interceptor: unsafe extern "C" fn(this: *const Fridgerator) -> *const Interceptor,
 
     pub interceptor_hook: unsafe extern "C" fn(
         this: *const Interceptor, orig_addr: *mut c_void, hook_addr: *mut c_void
@@ -638,8 +638,8 @@ pub struct Vtable {
 
 impl Vtable {
     pub const VALUE: Self = Self {
-        hachimi_instance,
-        hachimi_get_interceptor,
+        fridgerator_instance,
+        fridgerator_get_interceptor,
         interceptor_hook,
         interceptor_hook_vtable,
         interceptor_get_trampoline_addr,
@@ -696,7 +696,7 @@ impl Vtable {
 
 pub struct Plugin {
     pub name: String,
-    pub init_fn: HachimiInitFn
+    pub init_fn: FridgeratorInitFn
 }
 
 impl Plugin {

@@ -1,5 +1,5 @@
 use crate::{
-    core::{gui::SkillInfoDialog, Gui, Hachimi, game::Region, utils::mul_int},
+    core::{gui::SkillInfoDialog, Gui, Fridgerator, game::Region, utils::mul_int},
     il2cpp::{ext::{Il2CppStringExt, StringExt}, hook::{UnityEngine_CoreModule::{Component, Object, UnityAction}, UnityEngine_UI::{EventSystem, Text}}, sql::{self, TextDataQuery}, symbols::{create_delegate, get_field_from_name, get_field_object_value, get_method_addr}, types::*}
 };
 use once_cell::sync::Lazy;
@@ -33,7 +33,7 @@ static mut get_Id_addr: usize = 0;
 impl_addr_wrapper_fn!(get_Id, get_Id_addr, i32, this: *mut Il2CppObject);
 
 fn UpdateItemCommon(this: *mut Il2CppObject, skill_info: *mut Il2CppObject, orig_fn_cb: impl FnOnce()) {
-    let skill_cfg = &Hachimi::instance().localized_data.load().config.skill_formatting;
+    let skill_cfg = &Fridgerator::instance().localized_data.load().config.skill_formatting;
     let mut txt_cfg = sql::SkillTextFormatting::default();
 
     let name = get__nameText(this);
@@ -134,14 +134,14 @@ fn get_skill_text(skill_id: i32, this: *mut Il2CppObject) -> (String, String) {
 
 type SetupOnClickSkillButtonFn = extern "C" fn(this: *mut Il2CppObject, info: *mut Il2CppObject);
 extern "C" fn SetupOnClickSkillButton(this: *mut Il2CppObject, info: *mut Il2CppObject) {
-    if !Hachimi::instance().config.load().skill_info_dialog {
+    if !Fridgerator::instance().config.load().skill_info_dialog {
         get_orig_fn!(SetupOnClickSkillButton, SetupOnClickSkillButtonFn)(this, info);
         return;
     }
     let skill_id = get_Id(info);
     let button = get__bgButton(this);
     let button_obj = Component::get_gameObject(button);
-    Object::set_name(button_obj, format!("HachimiSkill_{}", skill_id).to_il2cpp_string());
+    Object::set_name(button_obj, format!("FridgeratorSkill_{}", skill_id).to_il2cpp_string());
     get_skill_text(skill_id, this);
     // info!("SKILL_TEXT_CACHE len: {}", SKILL_TEXT_CACHE.lock().unwrap().len());
 
@@ -151,8 +151,8 @@ extern "C" fn SetupOnClickSkillButton(this: *mut Il2CppObject, info: *mut Il2Cpp
         let object_name = Object::get_name(clicked_obj);
         let name_str = unsafe { (*object_name).as_utf16str() }.to_string();
 
-        if name_str.starts_with("HachimiSkill_") {
-            let id_str = &name_str["HachimiSkill_".len()..];
+        if name_str.starts_with("FridgeratorSkill_") {
+            let id_str = &name_str["FridgeratorSkill_".len()..];
             if let Ok(id) = id_str.parse::<i32>() {
                 if let Some(data) = SKILL_TEXT_CACHE.lock().unwrap().get(&id) {
                     let (name, desc) = data;
@@ -174,7 +174,7 @@ pub fn init(umamusume: *const Il2CppImage) {
     get_class_or_return!(umamusume, Gallop, PartsSingleModeSkillListItem);
     find_nested_class_or_return!(PartsSingleModeSkillListItem, Info);
 
-    if Hachimi::instance().game.region == Region::Japan {
+    if Fridgerator::instance().game.region == Region::Japan {
         let UpdateItem_addr = get_method_addr(PartsSingleModeSkillListItem, c"UpdateItem", 3);
         new_hook!(UpdateItem_addr, UpdateItemJp);
     }

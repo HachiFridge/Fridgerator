@@ -1,6 +1,6 @@
 use std::ptr::null_mut;
 
-use crate::{core::Hachimi, il2cpp::{symbols::{get_method_addr, SingletonLike}, ext::StringExt, types::*}};
+use crate::{core::Fridgerator, il2cpp::{symbols::{get_method_addr, SingletonLike}, ext::StringExt, types::*}};
 
 use super::{DialogCommon, TextId, WebViewDefine};
 
@@ -44,7 +44,7 @@ pub fn quick_open(dialog_title: &str, url: &str) {
 type GetUrlFn = extern "C" fn(this: *mut Il2CppObject, url_type: i32) -> *mut Il2CppString;
 extern "C" fn GetUrl(this: *mut Il2CppObject, url_type: i32) -> *mut Il2CppString {
     if url_type == WebViewDefine::Url_Update {
-        if let Some(news_url) = &Hachimi::instance().localized_data.load().config.news_url {
+        if let Some(news_url) = &Fridgerator::instance().localized_data.load().config.news_url {
             return news_url.to_il2cpp_string();
         }
     }

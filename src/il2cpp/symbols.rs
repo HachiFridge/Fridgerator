@@ -9,7 +9,7 @@ use std::sync::Mutex;
 use fnv::FnvHashMap;
 use once_cell::sync::Lazy;
 
-use crate::core::Hachimi;
+use crate::core::Fridgerator;
 use crate::symbols_impl;
 use crate::core::Error;
 
@@ -303,7 +303,7 @@ impl<T> IEnumerator<T> {
             return Err(Error::MethodNotFound("MoveNext".to_owned()));
         }
 
-        Hachimi::instance().interceptor.hook(move_next_addr, hook_fn as usize)
+        Fridgerator::instance().interceptor.hook(move_next_addr, hook_fn as usize)
     }
 }
 
