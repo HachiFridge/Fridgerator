@@ -1,0 +1,12 @@
+{
+    "rust-analyzer.linkedProjects": [
+        "Cargo.toml"
+    ],
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "[rust]": {
+        "editor.defaultFormatter": "rust-lang.rust-analyzer"
+    },
+    "files.eol": "\n"
+}

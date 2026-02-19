@@ -1,0 +1,8 @@
+/build
+/target
+/plugins
+
+# Shared IDE settings
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json

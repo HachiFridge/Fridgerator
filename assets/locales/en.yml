@@ -1,0 +1,242 @@
+fridgerator: "Fridgerator"
+
+windows:
+  menu_open_key: "Right arrow"
+
+android:
+  menu_open_key: "Vol Up + Vol Down"
+
+splash_sub: "\uf015 Press %{open_key_str} to open menu."
+loading_label: "Loading..."
+cancel: "Cancel"
+save: "Save"
+done: "Done"
+next: "Next"
+previous: "Previous"
+yes: "Yes"
+no: "No"
+ok: "OK"
+retry: "Retry"
+default: "Default"
+off: "Off"
+on: "On"
+enable: "Enable"
+disabled: "Disabled"
+minutes: "minutes"
+info: "Info"
+warning: "Warning"
+confirm_dialog_title: "Confirm"
+soft_restart_confirm_content: "Are you sure you want to soft restart the game?"
+in_game_browser_confirm_content: "Are you sure you want to open the in-game browser?"
+browser_dialog_title: "Browser"
+
+menu:
+  fps_text: "FPS: %{fps}"
+  close_menu: "\uf00d Close menu"
+  stats_heading: "\uf022 Stats"
+  localize_dict_entries: "localize_dict entries: %{count}"
+  hashed_dict_entries: "hashed_dict entries: %{count}"
+  config_heading: "\uf0ad Config"
+  open_config_editor: "\uf040 Open config editor"
+  reload_config: "\uf021 Reload config"
+  open_first_time_setup: "\uf135 Open first time setup"
+  graphics_heading: "\uf03e Graphics"
+  fps_label: "FPS"
+  vsync_label: "VSync"
+  stay_on_top: "Stay on top"
+  translation_heading: "\uf02d Translation"
+  reload_localized_data: "\uf021 Reload localized data"
+  check_for_updates: "\uf0aa Check for updates"
+  check_for_updates_pedantic: "\uf0aa Check for updates (pedantic)"
+  dump_localize_dict: "Dump localize dict"
+  danger_zone_heading: "\uf071 Danger Zone"
+  danger_zone_warning: "These options might have unintended effects on the game. Use with caution!"
+  soft_restart: "\uf021 Soft restart"
+  open_in_game_browser: "\uf0ac Open in-game browser"
+  toggle_game_ui: "\uf06e Toggle game UI"
+  discord_rpc: "Discord RPC"
+
+notification:
+  saved_localize_dump: "Saved to localize_dump.json"
+  config_reloaded: "Config reloaded."
+  config_saved: "Config saved."
+  localized_data_reloaded: "Localized data reloaded."
+  checking_for_tl_updates: "Checking for translation updates..."
+  no_tl_updates: "No translation updates available."
+  update_failed: "Update failed: %{reason}"
+  update_completed: "Update completed."
+  errors_during_update: "%{count} errors occurred during update. Check logs for more info."
+  checking_for_updates: "Checking for updates..."
+  no_updates: "No updates available."
+  press_to_set_menu_key: "Press a key in the game window to set the open-menu hotkey."
+  menu_open_key_set: "Open-menu hotkey set to %{key}"
+  ipc_softreset_exec: "IPC remote soft-reset executed"
+
+first_time_setup:
+  title: "First Time Setup"
+  welcome_heading: "Welcome"
+  welcome_content: >-
+    Fridgerator has been installed! This will guide you through the initial setup process.
+    If you're not interested in using the translation features, you may skip it by closing this dialog.
+
+
+    DISCLAIMER: Fridgerator is a community-driven project. All translations were made by various community contributors.
+    It is not developed or endorsed by Cygames, Inc., and violates the game's terms of service. By continuing,
+    you accept that you will be using it at your own risk.
+  translation_repo_heading: "Translation repo"
+  select_translation_repo: "Select a translation repo:"
+  no_compatible_repo: "No translation repos are compatible with this game version."
+  skip_translation: "Skip translations."
+  complete_heading: "All done!"
+  complete_content: >-
+    Click on Done to save the configuration.
+    If you chose a translation repo, an update check will be performed,
+    which will prompt you to download the new translation data.
+
+about:
+  title: "About"
+  copyright: "© %{year} HachiFridge Team"
+  view_license: "View license"
+  check_for_updates: "Check for updates"
+
+license:
+  title: "License"
+
+tl_updater:
+  title: "Updating..."
+  warning: "Translations will not work\nwhile update is in progress"
+
+config_editor:
+  title: "Config Editor"
+  general_tab: "\uf013 General"
+  graphics_tab: "\uf03e Graphics"
+  gameplay_tab: "\uf11b Gameplay"
+  language: "Language"
+  restore_defaults: "Restore Defaults"
+  disable_overlay: "Disable overlay (GUI)"
+  disable_overlay_warning: >-
+    This option will disable the Fridgerator overlay after you restart the game,
+    which means that you will NOT be able to access the Config Editor after this.
+    If this was not intentional, close this dialog and DISABLE the option.
+  debug_mode: "Debug mode"
+  enable_file_logging: "Enable file logging"
+  translator_mode: "Translator mode"
+  skip_first_time_setup: "Skip first time setup"
+  disable_auto_update_check: "Disable auto update\ncheck"
+  bg_update_mode: "Background update\nmode"
+  bg_update_periodic: "Periodic (Prompt)"
+  bg_update_silent: "Silent (Auto)"
+  bg_update_interval: "Background update\ninterval"
+  disable_translations: "Disable translations"
+  enable_ipc: "Enable IPC"
+  ipc_listen_all: "IPC listen all"
+  auto_translate_stories: "Auto translate\nstories"
+  auto_tl_warning: >-
+    Enabling this option requires a compatible translation provider to be
+    installed on your computer or a cloud service using the same framework as
+    py3translationServer. Without a provider installed, no additional translation
+    will happen and gameplay may be affected. Please leave this option disabled
+    if you do not have a translation framework installed.
+  auto_translate_ui: "Auto translate UI\n(MIGHT BREAK UIs)"
+  target_fps: "Target FPS"
+  virtual_resolution_multiplier: "Virtual resolution\nmultiplier"
+  ui_scale: "UI scale"
+  gui_scale: "Overlay scale"
+  ui_animation_scale: "UI animation scale"
+  graphics_quality: "Graphics quality"
+  vsync: "VSync"
+  auto_full_screen: "Auto full screen"
+  full_screen_mode: "Full screen mode"
+  full_screen_mode_exclusive: "Exclusive"
+  full_screen_mode_borderless: "Borderless"
+  block_minimize_in_full_screen: "Block minimize in\nfull screen"
+  resolution_scaling: "Resolution scaling"
+  resolution_scaling_default: "Default (1080p)"
+  resolution_scaling_ssize: "Scale to screen size"
+  resolution_scaling_wsize: "Scale to window size"
+  window_always_on_top: "Window always on top"
+  story_choice_auto_select_delay: "Story choice auto\nselect delay"
+  story_text_speed_multiplier: "Story text speed\nmultiplier"
+  force_allow_dynamic_camera: "Force allow\ndynamic camera"
+  live_theater_allow_same_chara: "Live theater\nallow same chara"
+  physics_update_mode: "Physics update\nmode"
+  disable_skill_name_translation: "Disable skill name\ntranslation"
+  hide_ingame_ui_hotkey: "Hide ingame UI\nhotkey"
+  hide_ingame_ui_hotkey_info: >-
+    This option allows a shortcut key to toggle the ingame UI.
+    For Android, it's double tap the Volume Up key within 0.3 seconds.
+    For PC/Android with keyboard, it's the Insert key. This key can also be changed in the config file.
+  discord_rpc: "Discord RPC"
+  menu_open_key: "Open menu hotkey"
+  menu_open_key_set: "Press to set"
+  msaa: "MSAA"
+  render_scale: "Render Scale"
+  aniso_level: "Anisotropic Filtering"
+  shadow_resolution: "Shadow Resolution"
+
+tl_update_dialog:
+  title: "New update available"
+  content: "A new translation update is available (%{size}). Do you want to download it?"
+  content_zip_warning: "A new translation update is available (%{changed_size}). This update will download the full archive (%{download_size}) instead."
+
+update_prompt_dialog:
+  title: "New update available"
+  content: |
+    A new Fridgerator update is available (%{version}). Do you want to install it?
+    The game will be restarted in order to apply the update.
+
+updating_dialog:
+  title: "Updating"
+  content: "Downloading update, the game will restart shortly..."
+
+steam_overlay_conflict_dialog:
+  title: "Notice"
+  content: >-
+    Purchases might not work with the Fridgerator overlay enabled. If the Steam overlay already showed
+    up for you to make a purchase, please ignore this message and press No. If it didn't work, press Yes
+    to temporarily disable the Fridgerator overlay. It will close the game, and the next time the game starts up,
+    the Fridgerator overlay will be disabled and you will be able to make a purchase. After that, you may restart
+    the game again to re-enable the Fridgerator overlay.
+key_names:
+  left: "Left arrow"
+  right: "Right arrow"
+  up: "Up arrow"
+  down: "Down arrow"
+  insert: "Insert"
+  delete: "Delete"
+  home: "Home"
+  end: "End"
+  page_up: "Page Up"
+  page_down: "Page Down"
+  escape: "Escape"
+  tab: "Tab"
+  enter: "Enter"
+  space: "Space"
+  backspace: "Backspace"
+  clear: "Clear"
+  pause: "Pause"
+  caps_lock: "Caps Lock"
+  scroll_lock: "Scroll Lock"
+  num_lock: "Num Lock"
+  print_screen: "Print Screen"
+  left_win: "Left Windows"
+  right_win: "Right Windows"
+  apps: "Menu"
+  alt: "Alt"
+  ctrl: "Ctrl"
+  shift: "Shift"
+  numpad_0: "Numpad 0"
+  numpad_1: "Numpad 1"
+  numpad_2: "Numpad 2"
+  numpad_3: "Numpad 3"
+  numpad_4: "Numpad 4"
+  numpad_5: "Numpad 5"
+  numpad_6: "Numpad 6"
+  numpad_7: "Numpad 7"
+  numpad_8: "Numpad 8"
+  numpad_9: "Numpad 9"
+  numpad_add: "Numpad +"
+  numpad_subtract: "Numpad -"
+  numpad_multiply: "Numpad *"
+  numpad_divide: "Numpad /"
+  numpad_decimal: "Numpad ."
