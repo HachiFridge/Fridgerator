@@ -62,6 +62,7 @@ pub mod CameraData;
 pub mod CascadeShadow;
 mod CascadeShadowForRace;
 pub mod GallopRenderer;
+pub mod StoryTimelineBg3DClipData;
 pub mod DialogManager;
 mod CharacterHomeTopUI;
 mod CharacterHomeTopUIController;
@@ -211,6 +212,7 @@ pub fn init() {
     StoryTimelineBlockData::init(image);
     StoryTimelineTrackData::init(image);
     StoryTimelineTextClipData::init(image);
+    StoryTimelineBg3DClipData::init(image);
     GallopUtil::init(image);
     UIManager::init(image);
     GraphicSettings::init(image);

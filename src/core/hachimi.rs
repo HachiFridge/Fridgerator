@@ -1089,6 +1089,8 @@ pub struct Config {
     pub shadow_normal_bias: Option<f32>,
     #[serde(default)]
     pub force_chara_shadows: bool,
+    #[serde(default)]
+    pub story_shadow_type: crate::il2cpp::hook::umamusume::StoryTimelineBg3DClipData::ShadowType3d,
 
     // Gameplay
     pub physics_update_mode: Option<SpringUpdateMode>,
