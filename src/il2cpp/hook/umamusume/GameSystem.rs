@@ -4,10 +4,10 @@ use crate::windows::free_camera::{self, CameraScene};
 #[cfg(target_os = "windows")]
 use crate::core::live_utils;
 #[cfg(target_os = "windows")]
-use super::Director;
-// use std::sync::atomic::{AtomicBool, Ordering};
-
+use super::Director;// use std::sync::atomic::{AtomicBool, Ordering};
 // pub static GAME_INITIALIZED: AtomicBool = AtomicBool::new(false);
+
+use super::GraphicSettings::{self, MsaaQuality};
 
 static mut CLASS: *mut Il2CppClass = 0 as _;
 pub fn class() -> *mut Il2CppClass {
@@ -73,6 +73,13 @@ pub fn on_game_initialized() {
     crate::android::utils::set_audio_capture_policy_all();
     #[cfg(target_os = "windows")]
     super::UIManager::apply_ui_scale();
+
+    if Hachimi::instance().config.load().msaa != MsaaQuality::Disabled {
+        let graphic_settings = GraphicSettings::instance();
+        if !graphic_settings.is_null() {
+            GraphicSettings::set__isMSAA(graphic_settings, true);
+        }
+    }
 
     // Invoke plugin callbacks
     let hachimi = Hachimi::instance();

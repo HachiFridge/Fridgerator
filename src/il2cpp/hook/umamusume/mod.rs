@@ -59,6 +59,9 @@ pub mod DialogObject;
 pub mod ImageCommon;
 pub mod TimeUtil;
 pub mod CameraData;
+pub mod CascadeShadow;
+mod CascadeShadowForRace;
+pub mod GallopRenderer;
 pub mod DialogManager;
 mod CharacterHomeTopUI;
 mod CharacterHomeTopUIController;
@@ -276,6 +279,9 @@ pub fn init() {
     }
     LowResolutionCamera::init(image);
     CameraData::init(image);
+    CascadeShadow::init(image);
+    CascadeShadowForRace::init(image);
+    GallopRenderer::init(image);
     TweenAnimationTimelineComponent::init(image);
     TweenAnimationTimelineData::init(image);
     TweenAnimationTimelineSheetData::init(image);
