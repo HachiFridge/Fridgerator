@@ -106,11 +106,22 @@ type ChangeResizeUIForPCFn = extern "C" fn(this: *mut Il2CppObject, width: i32, 
 extern "C" fn ChangeResizeUIForPC(this: *mut Il2CppObject, width: i32, height: i32) {
     use super::GraphicSettings;
 
-    get_orig_fn!(ChangeResizeUIForPC, ChangeResizeUIForPCFn)(this, width, height);
+    let windows_config = &Hachimi::instance().config.load().windows;
+    // The game's PC relayout assumes its fixed-aspect window; running it with a
+    // freeform size stretches the UI (e.g. the split-window control strip).
+    if !windows_config.freeform_window {
+        get_orig_fn!(ChangeResizeUIForPC, ChangeResizeUIForPCFn)(this, width, height);
+    }
+
     // Recreate the render texture so it scales with the resolution
-    if Hachimi::instance().config.load().windows.resolution_scaling.is_not_default() {
+    if windows_config.freeform_window ||
+        windows_config.resolution_scaling.is_not_default()
+    {
         CreateRenderTextureFromScreen(this);
-        GraphicSettings::Update3DRenderTexture(GraphicSettings::instance());
+        let graphic_settings = GraphicSettings::instance();
+        if !graphic_settings.is_null() {
+            GraphicSettings::Update3DRenderTexture(graphic_settings);
+        }
     }
     apply_ui_scale();
 }
