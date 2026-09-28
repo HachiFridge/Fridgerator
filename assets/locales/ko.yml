@@ -243,7 +243,6 @@ config_editor:
   live_vocals_swap: "라이브 보컬 교체"
   live_vocals_swap_character_n: "캐릭터 %{index}"
   free_camera: "프리 카메라"
-  skill_info_dialog: "커스텀 스킬 정보 대화상자"
   homescreen_bgseason: "홈 화면 배경 계절"
   disable_skill_name_translation: "스킬 이름 번역 비활성화"
   hide_ingame_ui_hotkey: "인게임 UI 숨기기 단축키"

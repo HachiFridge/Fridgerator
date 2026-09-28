@@ -245,7 +245,6 @@ config_editor:
   live_vocals_swap: "Pagpalit ng Vocals sa Live Theater"
   live_vocals_swap_character_n: "Karakter %{index}"
   free_camera: "Free Camera"
-  skill_info_dialog: "Custom na dialog ng skill info"
   homescreen_bgseason: "Panahon ng Homescreen Background"
   disable_skill_name_translation: "I-disable ang pag-translate ng mga skill name"
   hide_ingame_ui_hotkey: "I-enable ang hotkey ng pagtago ng game UI"

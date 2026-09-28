@@ -63,10 +63,6 @@ pub fn render(editor: &ConfigEditor, config: &mut crate::core::hachimi::Config, 
         }
     }
 
-    if Hachimi::instance().game.region == crate::core::game::Region::Japan {
-        ConfigEditor::list_tile_switch(ui, t!("config_editor.skill_info_dialog"), &mut config.skill_info_dialog, true);
-    }
-
     {
         let localized_data = Hachimi::instance().localized_data.load();
         let get_season = |k, default: &str| localized_data.localize_dict.get(k).map(|s| s.as_str()).unwrap_or(default).to_string();

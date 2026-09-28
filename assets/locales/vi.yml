@@ -238,7 +238,6 @@ config_editor:
   live_vocals_swap: "Thay đổi giọng hát trực tiếp"
   live_vocals_swap_character_n: "Nhân vật %{index}"
   free_camera: "Camera Tự do"
-  skill_info_dialog: "Hộp thoại thông tin kỹ năng tùy chỉnh"
   homescreen_bgseason: "Mùa nền Màn hình chính"
   disable_skill_name_translation: "Tắt dịch tên kỹ năng"
   hide_ingame_ui_hotkey: "Phím tắt ẩn giao diện trong game"

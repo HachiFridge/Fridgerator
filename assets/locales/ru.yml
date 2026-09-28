@@ -241,7 +241,6 @@ config_editor:
   live_vocals_swap: "Замена голосов в концертах"
   live_vocals_swap_character_n: "Персонаж %{index}"
   free_camera: "Свободная камера"
-  skill_info_dialog: "Пользовательское окно свойств навыков"
   homescreen_bgseason: "Время года на домашнем экране"
   disable_skill_name_translation: "Отключить перевод названий навыков"
   hide_ingame_ui_hotkey: "Включить кнопку скрытия интерфейса игры"

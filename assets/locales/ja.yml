@@ -236,7 +236,6 @@ config_editor:
   live_vocals_swap: "ライブボーカルの入れ替え"
   live_vocals_swap_character_n: "キャラクター %{index}"
   free_camera: "フリーカメラ"
-  skill_info_dialog: "カスタムスキル情報ダイアログ"
   homescreen_bgseason: "ホーム画面の背景シーズン"
   disable_skill_name_translation: "スキル名の翻訳を無効化"
   hide_ingame_ui_hotkey: "ゲーム内UI非表示ホットキー"

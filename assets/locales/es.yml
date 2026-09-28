@@ -244,7 +244,6 @@ config_editor:
   live_vocals_swap: "Cambiar vocalistas"
   live_vocals_swap_character_n: "Personaje %{index}"
   free_camera: "Cámara Libre"
-  skill_info_dialog: "Ver datos de habilidades (GUI)"
   homescreen_bgseason: "Estación en el menú principal"
   disable_skill_name_translation: "No traducir habilidades"
   hide_ingame_ui_hotkey: "Atajo para ocultar UI del juego"

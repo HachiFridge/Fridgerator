@@ -236,7 +236,6 @@ config_editor:
   live_vocals_swap: "Live Vocals Swap"
   live_vocals_swap_character_n: "Character %{index}"
   free_camera: "Free Camera"
-  skill_info_dialog: "Custom skill info dialog"
   homescreen_bgseason: "Homescreen Background Season"
   disable_skill_name_translation: "Disable skill name translation"
   hide_ingame_ui_hotkey: "Hide ingame UI hotkey"

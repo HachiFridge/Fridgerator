@@ -69,8 +69,6 @@ extern "C" fn GameSystem_LateUpdate(this: *mut Il2CppObject) {
 // good hook for initializing values i guess
 pub fn on_game_initialized() {
     Hachimi::instance().init_character_data();
-    // GAME_INITIALIZED.store(true, Ordering::Relaxed);
-    Hachimi::instance().init_skill_info();
     #[cfg(target_os = "android")]
     crate::android::utils::set_audio_capture_policy_all();
     #[cfg(target_os = "windows")]

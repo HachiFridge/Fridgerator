@@ -242,7 +242,6 @@ config_editor:
   live_vocals_swap: "Tukar vokal konser"
   live_vocals_swap_character_n: "Karakter %{index}"
   free_camera: "Kamera Bebas"
-  skill_info_dialog: "Dialog info skill kustom"
   homescreen_bgseason: "Latar musim di beranda"
   disable_skill_name_translation: "Matikan translasi nama skill"
   hide_ingame_ui_hotkey: "Sembunyikan hotkey UI dalam game"

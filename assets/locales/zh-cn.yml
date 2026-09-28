@@ -242,7 +242,6 @@ config_editor:
   live_vocals_swap: "Live 剧场音轨替换"
   live_vocals_swap_character_n: "角色 %{index}"
   free_camera: "自由视角"
-  skill_info_dialog: "自定义技能信息弹窗"
   homescreen_bgseason: "主界面背景季节"
   disable_skill_name_translation: "禁用技能名称翻译"
   hide_ingame_ui_hotkey: "隐藏游戏内 UI 快捷键"

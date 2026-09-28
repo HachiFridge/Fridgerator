@@ -19,7 +19,7 @@ use crate::{
     il2cpp::{
         self,
         hook::umamusume::CySpringController::SpringUpdateMode,
-        sql::{CharacterData, SkillInfo},
+        sql::CharacterData,
     },
 };
 
@@ -88,8 +88,6 @@ pub struct Hachimi {
 
     // Character data
     pub chara_data: ArcSwap<CharacterData>,
-    // Untranslated skill info
-    pub skill_info: ArcSwap<SkillInfo>,
 
     // Shared properties
     pub game: Game,
@@ -189,7 +187,6 @@ impl Hachimi {
 
             // Same with these
             chara_data: ArcSwap::default(),
-            skill_info: ArcSwap::default(),
 
             game,
             template_parser: template::Parser::new(&template_filters::LIST),
@@ -637,7 +634,6 @@ impl Hachimi {
             }
         };
         self.localized_data.store(Arc::new(new_data));
-        crate::il2cpp::hook::umamusume::PartsSingleModeSkillListItem::clear_skill_text_cache();
     }
 
     pub fn init_character_data(&self) {
@@ -649,23 +645,6 @@ impl Hachimi {
                     let data = CharacterData::load_from_db();
                     Hachimi::instance().chara_data.store(Arc::new(data));
                     info!("Character database loaded successfully.");
-                    if let Some(t) = thread {
-                        crate::il2cpp::symbols::detach_current_thread(t);
-                    }
-                })
-                .ok();
-        }
-    }
-
-    pub fn init_skill_info(&self) {
-        if self.skill_info.load().skill_names.is_empty() {
-            std::thread::Builder::new()
-                .name("skill_info_loader".into())
-                .spawn(|| {
-                    let thread = crate::il2cpp::symbols::attach_current_thread();
-                    let data = SkillInfo::load_from_db();
-                    Hachimi::instance().skill_info.store(Arc::new(data));
-                    info!("Skill info loaded successfully.");
                     if let Some(t) = thread {
                         crate::il2cpp::symbols::detach_current_thread(t);
                     }
@@ -1119,8 +1098,6 @@ pub struct Config {
     pub live_theater_allow_same_chara: bool,
     #[serde(default = "Config::default_live_vocals_swap")]
     pub live_vocals_swap: [i32; 6],
-    #[serde(default)]
-    pub skill_info_dialog: bool,
     #[serde(default)]
     pub homescreen_bgseason: crate::il2cpp::hook::umamusume::TimeUtil::BgSeason,
     #[serde(default)]
