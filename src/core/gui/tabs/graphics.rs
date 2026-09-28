@@ -4,8 +4,11 @@ use crate::core::gui::utils::grid_control_w;
 #[allow(unused_imports)]
 use egui_material3::*;
 use rust_i18n::t;
+use crate::core::{Hachimi, game::Region};
 use crate::il2cpp::hook::umamusume::CameraData::ShadowResolution;
 use crate::il2cpp::hook::umamusume::GraphicSettings::{GraphicsQuality, MsaaQuality};
+use crate::il2cpp::hook::umamusume::StoryTimelineBg3DClipData::ShadowType3d;
+use crate::il2cpp::hook::Unity_RenderPipelines_Universal_Runtime::SoftShadowQuality;
 use crate::il2cpp::hook::UnityEngine_CoreModule::Texture::AnisoLevel;
 
 
@@ -40,6 +43,28 @@ pub fn render(editor: &ConfigEditor, config: &mut crate::core::hachimi::Config, 
         (ShadowResolution::_256, "256x"), (ShadowResolution::_512, "512x"),
         (ShadowResolution::_1024, "1K"), (ShadowResolution::_2048, "2K"), (ShadowResolution::_4096, "4K"),
     ]);
+
+    if Hachimi::instance().game.region == Region::Japan {
+        ConfigEditor::list_tile_slider(ui, t!("config_editor.shadow_distance"), &mut config.shadow_distance, 0.0..=1000.0, 10.0, 0);
+        ConfigEditor::list_tile_switch(ui, t!("config_editor.soft_shadows"), &mut config.soft_shadows, true);
+        ConfigEditor::list_tile_combo(ui, t!("config_editor.soft_shadow_quality"), "soft_shadow_quality", &mut config.soft_shadow_quality, &[
+            (SoftShadowQuality::UsePipelineSettings, &t!("default")),
+            (SoftShadowQuality::Low, &t!("low")),
+            (SoftShadowQuality::Medium, &t!("medium")),
+            (SoftShadowQuality::High, &t!("high")),
+        ]);
+        ConfigEditor::list_tile_option_slider(ui, &t!("config_editor.shadow_depth_bias"), &mut config.shadow_depth_bias, 0.0..=5.0);
+        ConfigEditor::list_tile_option_slider(ui, &t!("config_editor.shadow_normal_bias"), &mut config.shadow_normal_bias, 0.0..=10.0);
+        ConfigEditor::list_tile_switch(ui, t!("config_editor.force_chara_shadows"), &mut config.force_chara_shadows, true);
+        ConfigEditor::list_tile_combo(ui, t!("config_editor.story_shadow_type"), "story_shadow_type", &mut config.story_shadow_type, &[
+            (ShadowType3d::Default, &t!("default")),
+            (ShadowType3d::None, "None"),
+            (ShadowType3d::CircleShadow, &t!("circle")),
+            (ShadowType3d::HardShadow, &t!("hard")),
+            (ShadowType3d::SoftShadow, &t!("soft")),
+        ]);
+    }
+
     ConfigEditor::list_tile_combo(ui, t!("config_editor.graphics_quality"), "graphics_quality", &mut config.graphics_quality, &[
         (GraphicsQuality::Default, &t!("default")),
         (GraphicsQuality::Toon1280, "Toon1280"), (GraphicsQuality::Toon1280x2, "Toon1280x2"),

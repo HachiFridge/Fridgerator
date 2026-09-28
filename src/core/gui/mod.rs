@@ -828,7 +828,7 @@ impl Gui {
     }
 
     pub fn race_slider_showing() -> bool {
-        use crate::il2cpp::hook::umamusume::{RaceHorseManagerBase, RaceManager, RaceManagerReplayBase};
+        use crate::il2cpp::hook::umamusume::{RaceHorseManagerBase, RaceManager, RaceManagerReplayBase, SceneManager};
         use crate::core::race_director;
 
         let config = Hachimi::instance().config.load();
@@ -843,8 +843,15 @@ impl Gui {
             return false;
         }
 
+        if !SceneManager::is_race_scene_family() {
+            return false;
+        }
+
         let race_manager = RaceManager::instance();
-        if race_manager.is_null() || RaceManager::is_race_finished(race_manager) {
+        if race_manager.is_null()
+            || RaceManager::get__horseManager(race_manager).is_null()
+            || RaceManager::is_race_finished(race_manager)
+        {
             return false;
         }
 
@@ -1067,7 +1074,7 @@ impl Gui {
     }
 
     pub fn race_playback_button_showing() -> bool {
-        use crate::il2cpp::hook::umamusume::{RaceHorseManagerBase, RaceManager};
+        use crate::il2cpp::hook::umamusume::{RaceHorseManagerBase, RaceManager, SceneManager};
         use crate::core::race_director;
 
         if !Hachimi::instance().config.load().race_playback_button
@@ -1079,8 +1086,16 @@ impl Gui {
             return false;
         }
 
+        if !SceneManager::is_race_scene_family() {
+            return false;
+        }
+
         let race_manager = RaceManager::instance();
-        !race_manager.is_null() && !RaceManager::is_race_finished(race_manager)
+        if race_manager.is_null() || RaceManager::get__horseManager(race_manager).is_null() {
+            return false;
+        }
+
+        !RaceManager::is_race_finished(race_manager)
     }
 
     fn run_race_playback_button(ctx: &egui::Context) {
@@ -2718,6 +2733,8 @@ impl Gui {
             && self.windows.is_empty()
             && !IS_LIVE_SCENE.load(atomic::Ordering::Relaxed)
             && !free_camera_overlay
+            && !Self::is_consuming_input_atomic()
+            && !Self::is_gui_input_active_atomic()
             // These three are drawn unconditionally from run() (not gated behind
             // menu_visible/self.windows), so the present-hook's "nothing to draw, skip
             // this frame's GUI pass entirely" optimization above needs to know about them
