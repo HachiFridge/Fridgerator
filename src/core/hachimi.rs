@@ -1077,6 +1077,18 @@ pub struct Config {
     pub shadow_resolution: crate::il2cpp::hook::umamusume::CameraData::ShadowResolution,
     #[serde(default)]
     pub graphics_quality: crate::il2cpp::hook::umamusume::GraphicSettings::GraphicsQuality,
+    #[serde(default)]
+    pub shadow_distance: f32,
+    #[serde(default)]
+    pub soft_shadows: bool,
+    #[serde(default)]
+    pub soft_shadow_quality: crate::il2cpp::hook::Unity_RenderPipelines_Universal_Runtime::UniversalRenderPipelineAsset::SoftShadowQuality,
+    #[serde(default)]
+    pub shadow_depth_bias: Option<f32>,
+    #[serde(default)]
+    pub shadow_normal_bias: Option<f32>,
+    #[serde(default)]
+    pub force_chara_shadows: bool,
 
     // Gameplay
     pub physics_update_mode: Option<SpringUpdateMode>,

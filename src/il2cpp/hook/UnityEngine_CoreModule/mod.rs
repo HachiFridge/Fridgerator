@@ -27,6 +27,7 @@ pub mod QualitySettings;
 pub mod Screen;
 pub mod SceneManager;
 pub mod Scene;
+pub mod Shader;
 
 pub const HideFlags_DontUnloadUnusedAsset: i32 = 32;
 
@@ -59,6 +60,7 @@ pub fn init() {
     RectOffset::init(image);
     SceneManager::init(image);
     Scene::init(image);
+    Shader::init(image);
     Screen::init(image);
     #[cfg(target_os = "android")]
     {
