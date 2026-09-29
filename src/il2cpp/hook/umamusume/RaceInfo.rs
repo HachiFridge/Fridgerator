@@ -1,4 +1,4 @@
-use crate::il2cpp::{symbols::{get_field_from_name, get_method_addr}, types::*};
+use crate::{core::{game::Region, Hachimi}, il2cpp::{symbols::{get_field_from_name, get_method_addr}, types::*}};
 
 static mut GET_RACETYPE_ADDR: usize = 0;
 impl_addr_wrapper_fn!(get_RaceType, GET_RACETYPE_ADDR, i32, this: *mut Il2CppObject);
@@ -8,6 +8,12 @@ impl_addr_wrapper_fn!(set_RaceType, SET_RACETYPE_ADDR, (), this: *mut Il2CppObje
 
 static mut GET_COURSE_DISTANCE_ADDR: usize = 0;
 impl_addr_wrapper_fn!(get_CourseDistance, GET_COURSE_DISTANCE_ADDR, i32, this: *mut Il2CppObject);
+
+static mut GET_COURSE_ONLY_DISTANCE_ADDR: usize = 0;
+impl_addr_wrapper_fn!(get_CourseOnlyDistance, GET_COURSE_ONLY_DISTANCE_ADDR, i32, this: *mut Il2CppObject);
+
+static mut GET_RUN_UP_DISTANCE_ADDR: usize = 0;
+impl_addr_wrapper_fn!(get_RunUpDistance, GET_RUN_UP_DISTANCE_ADDR, i32, this: *mut Il2CppObject);
 
 // Detects story-mode races, which several race-overlay features disable themselves for
 static mut GET_IS_STORY_RACE_ADDR: usize = 0;
@@ -24,6 +30,12 @@ pub fn init(umamusume: *const Il2CppImage) {
         SET_RACETYPE_ADDR = get_method_addr(RaceInfo, c"set_RaceType", 1);
         GET_COURSE_DISTANCE_ADDR = get_method_addr(RaceInfo, c"get_CourseDistance", 0);
         GET_IS_STORY_RACE_ADDR = get_method_addr(RaceInfo, c"get_IsStoryRace", 0);
+
+        // JP/TW only; the Global RaceInfo doesn't expose these getters.
+        if Hachimi::instance().game.region != Region::Global {
+            GET_COURSE_ONLY_DISTANCE_ADDR = get_method_addr(RaceInfo, c"get_CourseOnlyDistance", 0);
+            GET_RUN_UP_DISTANCE_ADDR = get_method_addr(RaceInfo, c"get_RunUpDistance", 0);
+        }
         RACE_COURSE_SET_FIELD = get_field_from_name(RaceInfo, c"<RaceCourseSet>k__BackingField");
     }
 
@@ -53,4 +65,13 @@ pub fn course_distance(race_info: *mut Il2CppObject) -> i32 {
     } else {
         0
     }
+}
+
+/// `get_CourseOnlyDistance() + get_RunUpDistance()` (JP/TW builds), guarded so a
+/// failed method resolution returns 0 instead of calling through a null address.
+pub fn course_only_plus_run_up(race_info: *mut Il2CppObject) -> i32 {
+    if unsafe { GET_COURSE_ONLY_DISTANCE_ADDR == 0 || GET_RUN_UP_DISTANCE_ADDR == 0 } {
+        return 0;
+    }
+    get_CourseOnlyDistance(race_info) + get_RunUpDistance(race_info)
 }
