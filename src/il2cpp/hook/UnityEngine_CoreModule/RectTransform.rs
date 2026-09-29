@@ -29,8 +29,14 @@ impl_addr_wrapper_fn!(set_sizeDelta, SET_SIZEDELTA_ADDR, (), this: *mut Il2CppOb
 static mut GET_ANCHORMIN_ADDR: usize = 0;
 impl_addr_wrapper_fn!(get_anchorMin, GET_ANCHORMIN_ADDR, Vector2_t, this: *mut Il2CppObject);
 
+static mut SET_ANCHORMIN_ADDR: usize = 0;
+impl_addr_wrapper_fn!(set_anchorMin, SET_ANCHORMIN_ADDR, (), this: *mut Il2CppObject, value: Vector2_t);
+
 static mut GET_ANCHORMAX_ADDR: usize = 0;
 impl_addr_wrapper_fn!(get_anchorMax, GET_ANCHORMAX_ADDR, Vector2_t, this: *mut Il2CppObject);
+
+static mut SET_ANCHORMAX_ADDR: usize = 0;
+impl_addr_wrapper_fn!(set_anchorMax, SET_ANCHORMAX_ADDR, (), this: *mut Il2CppObject, value: Vector2_t);
 
 static mut GET_PIVOT_ADDR: usize = 0;
 impl_addr_wrapper_fn!(get_pivot, GET_PIVOT_ADDR, Vector2_t, this: *mut Il2CppObject);
@@ -46,6 +52,12 @@ impl_addr_wrapper_fn!(set_anchoredPosition, SET_ANCHOREDPOSITION_ADDR, (), this:
 
 static mut GET_RECT_ADDR: usize = 0;
 impl_addr_wrapper_fn!(get_rect, GET_RECT_ADDR, Rect_t, this: *mut Il2CppObject);
+
+static mut GET_OFFSETMIN_ADDR: usize = 0;
+impl_addr_wrapper_fn!(get_offsetMin, GET_OFFSETMIN_ADDR, Vector2_t, this: *mut Il2CppObject);
+
+static mut SET_OFFSETMIN_ADDR: usize = 0;
+impl_addr_wrapper_fn!(set_offsetMin, SET_OFFSETMIN_ADDR, (), this: *mut Il2CppObject, value: Vector2_t);
 
 static mut GET_OFFSETMAX_ADDR: usize = 0;
 impl_addr_wrapper_fn!(get_offsetMax, GET_OFFSETMAX_ADDR, Vector2_t, this: *mut Il2CppObject);
@@ -63,12 +75,16 @@ pub fn init(UnityEngine_CoreModule: *const Il2CppImage) {
         GET_SIZEDELTA_ADDR = get_method_addr(RectTransform, c"get_sizeDelta", 0);
         SET_SIZEDELTA_ADDR = get_method_addr(RectTransform, c"set_sizeDelta", 1);
         GET_ANCHORMIN_ADDR = get_method_addr(RectTransform, c"get_anchorMin", 0);
+        SET_ANCHORMIN_ADDR = get_method_addr(RectTransform, c"set_anchorMin", 1);
         GET_ANCHORMAX_ADDR = get_method_addr(RectTransform, c"get_anchorMax", 0);
+        SET_ANCHORMAX_ADDR = get_method_addr(RectTransform, c"set_anchorMax", 1);
         GET_PIVOT_ADDR = get_method_addr(RectTransform, c"get_pivot", 0);
         SET_PIVOT_ADDR = get_method_addr(RectTransform, c"set_pivot", 1);
         GET_ANCHOREDPOSITION_ADDR = get_method_addr(RectTransform, c"get_anchoredPosition", 0);
         SET_ANCHOREDPOSITION_ADDR = get_method_addr(RectTransform, c"set_anchoredPosition", 1);
         GET_RECT_ADDR = get_method_addr(RectTransform, c"get_rect", 0);
+        GET_OFFSETMIN_ADDR = get_method_addr(RectTransform, c"get_offsetMin", 0);
+        SET_OFFSETMIN_ADDR = get_method_addr(RectTransform, c"set_offsetMin", 1);
         GET_OFFSETMAX_ADDR = get_method_addr(RectTransform, c"get_offsetMax", 0);
         SET_OFFSETMAX_ADDR = get_method_addr(RectTransform, c"set_offsetMax", 1);
     }

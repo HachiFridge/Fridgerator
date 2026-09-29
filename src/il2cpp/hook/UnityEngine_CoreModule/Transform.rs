@@ -37,6 +37,9 @@ impl_addr_wrapper_fn!(get_forward, GET_FORWARD_ADDR, Vector3_t, this: *mut Il2Cp
 static mut GET_LOCALSCALE_ADDR: usize = 0;
 impl_addr_wrapper_fn!(get_localScale, GET_LOCALSCALE_ADDR, Vector3_t, this: *mut Il2CppObject);
 
+static mut GET_LOCALPOSITION_ADDR: usize = 0;
+impl_addr_wrapper_fn!(get_localPosition, GET_LOCALPOSITION_ADDR, Vector3_t, this: *mut Il2CppObject);
+
 static mut SET_LOCALSCALE_ADDR: usize = 0;
 impl_addr_wrapper_fn!(set_localScale, SET_LOCALSCALE_ADDR, (), this: *mut Il2CppObject, value: Vector3_t);
 
@@ -92,6 +95,7 @@ pub fn init(UnityEngine_CoreModule: *const Il2CppImage) {
         GET_FORWARD_ADDR = get_method_addr(Transform, c"get_forward", 0);
         GET_LOCALSCALE_ADDR = get_method_addr(Transform, c"get_localScale", 0);
         SET_LOCALSCALE_ADDR = get_method_addr(Transform, c"set_localScale", 1);
+        GET_LOCALPOSITION_ADDR = get_method_addr(Transform, c"get_localPosition", 0);
         FIND_ADDR = get_method_addr(Transform, c"Find", 1);
 
         GET_POSITION_INJECTED_ADDR = il2cpp_resolve_icall(c"UnityEngine.Transform::get_position_Injected(UnityEngine.Vector3&)".as_ptr());
