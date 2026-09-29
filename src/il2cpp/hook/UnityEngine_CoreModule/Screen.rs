@@ -84,6 +84,11 @@ type SetResolutionInjectedFn = extern "C" fn(width: i32, height: i32, fullscreen
 #[cfg(target_os = "windows")]
 extern "C" fn SetResolution_Injected(width: i32, height: i32, full_screen_mode: i32, preferred_refresh_rate: *const RefreshRate) {
     let windows_config = &Hachimi::instance().config.load().windows;
+    crate::core::utils::size_trace::event_msg("SetResolution", &format!(
+        "{}x{} fsm={} freeform={} auto_fs={}",
+        width, height, full_screen_mode, windows_config.freeform_window, windows_config.auto_full_screen
+    ));
+
     if windows_config.freeform_window {
         crate::il2cpp::hook::umamusume::StandaloneWindowResize::set_is_prevent_reshape(true);
         return;
@@ -98,6 +103,9 @@ extern "C" fn SetResolution_Injected(width: i32, height: i32, full_screen_mode: 
     }
 
     get_orig_fn!(SetResolution_Injected, SetResolutionInjectedFn)(width, height, full_screen_mode, preferred_refresh_rate);
+    crate::core::utils::size_trace::event_msg("SetResolution.orig", &format!(
+        "{}x{} fsm={}", width, height, full_screen_mode
+    ));
 
     // Re-apply topmost after any resolution/orientation change.
     // Windows resets the Z-order when the game transitions between portrait
@@ -116,6 +124,11 @@ pub fn set_resolution_direct(width: i32, height: i32, fullscreen_mode: i32, pref
 type RequestOrientationFn = extern "C" fn(orientation: ScreenOrientation);
 #[cfg(target_os = "windows")]
 extern "C" fn RequestOrientation(orientation: ScreenOrientation) {
+    crate::core::utils::size_trace::event_msg("RequestOrientation", &format!(
+        "orientation={} freeform={}",
+        orientation as i32, Hachimi::instance().config.load().windows.freeform_window
+    ));
+
     if Hachimi::instance().config.load().windows.freeform_window {
         return;
     }
@@ -199,10 +212,13 @@ type GetWidthFn = extern "C" fn() -> i32;
 #[cfg(target_os = "windows")]
 extern "C" fn get_Width() -> i32 {
     if let Some((width, _)) = crate::windows::utils::get_scaling_res() {
+        crate::core::utils::size_trace::event_msg("Screen.get_Width", &format!("scaling_res w={}", width));
         return width;
     }
 
-    get_orig_fn!(get_Width, GetWidthFn)()
+    let orig = get_orig_fn!(get_Width, GetWidthFn)();
+    crate::core::utils::size_trace::event_msg("Screen.get_Width", &format!("orig w={}", orig));
+    orig
 }
 
 #[cfg(target_os = "windows")]
@@ -215,10 +231,12 @@ type GetHeightFn = extern "C" fn() -> i32;
 #[cfg(target_os = "windows")]
 extern "C" fn get_Height() -> i32 {
     if let Some((_, height)) = crate::windows::utils::get_scaling_res() {
+        crate::core::utils::size_trace::event_msg("Screen.get_Height", &format!("scaling_res h={}", height));
         return height;
     }
-
-    get_orig_fn!(get_Height, GetHeightFn)()
+    let orig = get_orig_fn!(get_Height, GetHeightFn)();
+    crate::core::utils::size_trace::event_msg("Screen.get_Height", &format!("orig h={}", orig));
+    orig
 }
 
 #[cfg(target_os = "windows")]

@@ -392,6 +392,13 @@ fn queue_position_offset(context: *mut Il2CppObject, fallback: *mut Il2CppObject
     }
 
     if !actions.is_empty() {
+        if crate::core::utils::size_trace::enabled() {
+            let ctx_path = if !context.is_null() { get_hierarchy_path(context) } else { "None".to_string() };
+            let fb_path = if !fallback.is_null() { get_hierarchy_path(fallback) } else { "None".to_string() };
+            crate::core::utils::size_trace::event_msg("TG.queue", &format!(
+                "ctx={} fallback={} actions={}", ctx_path, fb_path, actions.len()
+            ));
+        }
         let mut pending = PENDING_OFFSETS.lock().unwrap();
         pending.push(PendingOffset { actions });
     }
@@ -470,6 +477,13 @@ fn apply_common_overrides(
                     applied: Vector2_t { x: new_x, y: new_y },
                 });
                 RectTransform::set_anchoredPosition(target, Vector2_t { x: new_x, y: new_y });
+                if crate::core::utils::size_trace::enabled() {
+                    let name = (*target).name();
+                    crate::core::utils::size_trace::event_msg("TG.apply", &format!(
+                        "{} base=({:.1}, {:.1}) -> ({:.1}, {:.1})",
+                        name, base_x, base_y, new_x, new_y
+                    ));
+                }
             }
         }
     }
@@ -503,6 +517,13 @@ pub fn drain_pending_offsets() {
 
     let offsets: Vec<PendingOffset> = pending.drain(..).collect();
     drop(pending);
+
+    if crate::core::utils::size_trace::enabled() {
+        let total: usize = offsets.iter().map(|p| p.actions.len()).sum();
+        crate::core::utils::size_trace::event_msg("TG.drain", &format!(
+            "batches={} actions={}", offsets.len(), total
+        ));
+    }
 
     let config = Hachimi::instance().config.load();
     let mut pos_map = ORIGINAL_POSITIONS.lock().unwrap();

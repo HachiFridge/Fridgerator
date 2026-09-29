@@ -115,6 +115,16 @@ extern "C" fn IDXGISwapChain_Present(this: *mut c_void, sync_interval: c_uint, f
     }
     let width = rect.right - rect.left;
     let height = rect.bottom - rect.top;
+
+    static LAST_PRESENT_SIZE: std::sync::atomic::AtomicI64 = std::sync::atomic::AtomicI64::new(-1);
+    let packed = ((width as i64) << 32) | (height as i64 & 0xFFFF_FFFF);
+    if crate::core::utils::size_trace::enabled() &&
+        LAST_PRESENT_SIZE.swap(packed, std::sync::atomic::Ordering::Relaxed) != packed {
+        crate::core::utils::size_trace::event_msg("Present.client", &format!(
+            "{}x{}", width, height
+        ));
+    }
+
     gui.set_screen_size(width, height);
 
     // Run and render the GUI
@@ -190,6 +200,12 @@ extern "C" fn IDXGISwapChain_ResizeBuffers(
     // even if we don't use it here.
     if check_hwnd(this).0 == std::ptr::null_mut() {
         return orig_fn(this, buffer_count, width, height, new_format, swap_chain_flags);
+    }
+
+    if crate::core::utils::size_trace::enabled() {
+        crate::core::utils::size_trace::event_msg("ResizeBuffers", &format!(
+            "count={} {}x{} flags={:#x}", buffer_count, width, height, swap_chain_flags
+        ));
     }
 
     let painter_mutex = match init_painter(this) {

@@ -54,12 +54,20 @@ pub fn apply_ui_scale() {
 
     let ui_manager = instance();
     if ui_manager.is_null() {
+        crate::core::utils::size_trace::event_msg("apply_ui_scale", &format!(
+            "scale={:.4} (early return: UIManager instance null)", scale
+        ));
         return;
     }
     let canvas_scaler_list = GetCanvasScalerList(ui_manager);
     if canvas_scaler_list.this.is_null() {
+        crate::core::utils::size_trace::event_msg("apply_ui_scale", &format!(
+            "scale={:.4} (early return: scaler list null)", scale
+        ));
         return;
     }
+    #[cfg(target_os = "windows")]
+    let scaler_count = unsafe { canvas_scaler_list.as_slice().len() };
     for scaler in unsafe { canvas_scaler_list.as_slice().iter() } {
         if scaler.is_null() {
             continue;
@@ -78,6 +86,11 @@ pub fn apply_ui_scale() {
         #[cfg(target_os = "windows")]
         CanvasScaler::set_scaleFactor(*scaler, scale);
     }
+
+    #[cfg(target_os = "windows")]
+    crate::core::utils::size_trace::event_msg("apply_ui_scale", &format!(
+        "scale={:.4} scalers={}", scale, scaler_count
+    ));
 
     crate::core::captions::Captions::reposition_scheduled();
 }
@@ -113,6 +126,12 @@ extern "C" fn ChangeResizeUIForPC(this: *mut Il2CppObject, width: i32, height: i
         get_orig_fn!(ChangeResizeUIForPC, ChangeResizeUIForPCFn)(this, width, height);
     }
 
+    crate::core::utils::size_trace::event_msg("ChangeResizeUIForPC", &format!(
+        "{}x{} freeform={} relayout_called={} rt_recreate={}",
+        width, height, windows_config.freeform_window, !windows_config.freeform_window,
+        windows_config.freeform_window || windows_config.resolution_scaling.is_not_default()
+    ));
+
     // Recreate the render texture so it scales with the resolution
     if windows_config.freeform_window ||
         windows_config.resolution_scaling.is_not_default()
@@ -143,6 +162,10 @@ pub fn refresh_after_window_resize(width: i32, height: i32) {
     if width <= 0 || height <= 0 {
         return;
     }
+
+    crate::core::utils::size_trace::event_msg("refresh_after_window_resize", &format!(
+        "{}x{}", width, height
+    ));
 
     Screen::update_original_screen_size(width, height);
     WindowsGamepadControl::refresh_after_window_resize();

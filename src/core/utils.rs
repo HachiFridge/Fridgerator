@@ -692,6 +692,136 @@ pub unsafe fn game_str_has_newline(string: *mut Il2CppString) -> bool {
     false
 }
 
+/// Debug helper: change-triggered diagnostic logging for the window/layout path.
+///
+/// Logs only when a tagged value changes (unchanged state re-logs at most every
+/// 5s), so a gacha-pull reproduction produces a short, readable `[size_trace]`
+/// timeline in hachimi.log instead of per-frame spam. Enable by creating an
+/// empty file named `size_trace` in the hachimi data dir (next to config.json /
+/// hachimi.log), or by setting the HACHIMI_SIZE_TRACE env var.
+pub mod size_trace {
+    use std::sync::Mutex;
+
+    use crate::core::Hachimi;
+
+    use std::collections::HashMap;
+    use std::sync::atomic::{AtomicU64, Ordering};
+
+    use once_cell::sync::Lazy;
+
+    struct Slot {
+        detail: String,
+        last_log_ms: u128,
+    }
+
+    static SLOTS: Lazy<Mutex<HashMap<u64, Slot>>> = Lazy::new(|| Mutex::new(HashMap::new()));
+    static LAST_CFG: AtomicU64 = AtomicU64::new(0);
+
+    fn trace_enabled() -> bool {
+        // Cached with a short TTL so a marker created mid-session is picked up
+        // quickly without stat-ing on every call.
+        static CACHE: AtomicU64 = AtomicU64::new(u64::MAX); // (ms << 1) | enabled; MAX = unset
+        let now = monotonic() as u64;
+        let cached = CACHE.load(Ordering::Relaxed);
+        if cached != u64::MAX && now.saturating_sub(cached >> 1) < 2000 {
+            return cached & 1 == 1;
+        }
+
+        // Enabled by creating an empty file named "size_trace" in the hachimi
+        // data dir (next to config.json / hachimi.log), or by the
+        // HACHIMI_SIZE_TRACE environment variable.
+        let enabled = std::env::var_os("HACHIMI_SIZE_TRACE").is_some()
+            || Hachimi::instance().game.data_dir.join("size_trace").exists();
+
+        CACHE.store((now << 1) | (enabled as u64), Ordering::Relaxed);
+        enabled
+    }
+
+    /// Fast pre-check for hot call sites (skip building detail strings when off).
+    pub fn enabled() -> bool {
+        trace_enabled()
+    }
+
+    fn monotonic() -> u128 {
+        use std::time::Instant;
+        static START: once_cell::sync::Lazy<Instant> = once_cell::sync::Lazy::new(Instant::now);
+        START.elapsed().as_millis()
+    }
+
+    /// Fingerprint of the settings that influence the layout path, so we can see
+    /// when the gates themselves change. Cheap: a few config field reads.
+    fn config_fingerprint() -> u64 {
+        use std::hash::{Hash, Hasher};
+        let config = Hachimi::instance().config.load();
+        let mut hasher = std::collections::hash_map::DefaultHasher::new();
+
+        #[cfg(target_os = "windows")]
+        {
+            config.windows.freeform_window.hash(&mut hasher);
+            config.windows.freeform_ui_scale_auto.hash(&mut hasher);
+            config.windows.auto_full_screen.hash(&mut hasher);
+            config.windows.resolution_scaling.hash(&mut hasher);
+        }
+        config.ui_scale.to_bits().hash(&mut hasher);
+        config.graphics_quality.hash(&mut hasher);
+        config.render_scale.to_bits().hash(&mut hasher);
+        config.virtual_res_mult.to_bits().hash(&mut hasher);
+        hasher.finish()
+    }
+
+    /// Returns " (layout config changed)" if the layout-relevant config fingerprint
+    /// changed since the previous logged line, else "".
+    fn cfg_change_suffix() -> &'static str {
+        let fp = config_fingerprint();
+        let prev = LAST_CFG.swap(fp, Ordering::Relaxed);
+        if prev != fp { " (layout config changed)" } else { "" }
+    }
+
+    fn emit(tag: &str, detail: &str) {
+        use std::hash::{Hash, Hasher};
+
+        let mut hasher = std::collections::hash_map::DefaultHasher::new();
+        tag.hash(&mut hasher);
+        detail.hash(&mut hasher);
+        let key = hasher.finish();
+
+        let now = monotonic();
+        let should_log = {
+            let mut slots = SLOTS.lock().unwrap();
+            if slots.len() > 512 {
+                slots.clear(); // safety valve; tag/detail pairs are bounded in practice
+            }
+            match slots.get_mut(&key) {
+                Some(slot) => {
+                    let since = now.saturating_sub(slot.last_log_ms);
+                    let ok = if detail == slot.detail { since >= 5000 } else { since >= 100 };
+                    if ok {
+                        slot.detail = detail.to_owned();
+                        slot.last_log_ms = now;
+                    }
+                    ok
+                }
+                None => {
+                    slots.insert(key, Slot { detail: detail.to_owned(), last_log_ms: now });
+                    true
+                }
+            }
+        };
+
+        if should_log {
+            info!("[size_trace] {} {}{}", tag, detail, cfg_change_suffix());
+        }
+    }
+
+    /// Log when `detail` changes for `tag` (unchanged state re-logs at most every 5s).
+    pub fn event_msg(tag: &str, detail: &str) {
+        if !trace_enabled() {
+            return;
+        }
+        emit(tag, detail);
+    }
+}
+
 pub fn scale_to_aspect_ratio(sizes: (i32, i32), aspect_ratio: f32, prefer_larger: bool) -> (i32, i32) {
     let (mut width, mut height) = sizes;
     let orig_aspect_ratio = width as f32 / height as f32;

@@ -62,7 +62,7 @@ static mut UPDATE3DRENDERTEXTURE_ADDR: usize = 0;
 #[cfg(target_os = "windows")]
 impl_addr_wrapper_fn!(Update3DRenderTexture, UPDATE3DRENDERTEXTURE_ADDR, (), this: *mut Il2CppObject);
 
-#[derive(Default, Copy, Clone, Serialize, Deserialize, Eq, PartialEq)]
+#[derive(Default, Copy, Clone, Serialize, Deserialize, Eq, PartialEq, Debug, Hash)]
 #[repr(i32)]
 pub enum GraphicsQuality {
     #[default] Default = -1,
@@ -98,6 +98,9 @@ type set_ResolutionScaleFn = extern "C" fn(this: *mut Il2CppObject, value: f32);
 extern "C" fn set_ResolutionScale(this: *mut Il2CppObject, value: f32) {
     let render_scale = Hachimi::instance().config.load().render_scale;
     let target_value = if render_scale != 1.0 { render_scale } else { value };
+    crate::core::utils::size_trace::event_msg("set_ResolutionScale", &format!(
+        "requested={:.4} -> {:.4}", value, target_value
+    ));
     get_orig_fn!(set_ResolutionScale, set_ResolutionScaleFn)(this, target_value);
 }
 
@@ -105,6 +108,9 @@ type set_ResolutionScale2DFn = extern "C" fn(this: *mut Il2CppObject, value: f32
 pub extern "C" fn set_ResolutionScale2D(this: *mut Il2CppObject, value: f32) {
     let render_scale = Hachimi::instance().config.load().render_scale;
     let target_value = if render_scale != 1.0 { render_scale } else { value };
+    crate::core::utils::size_trace::event_msg("set_ResolutionScale2D", &format!(
+        "requested={:.4} -> {:.4}", value, target_value
+    ));
     get_orig_fn!(set_ResolutionScale2D, set_ResolutionScale2DFn)(this, target_value);
 }
 
@@ -121,9 +127,16 @@ type ApplyGraphicsQualityFn = extern "C" fn(this: *mut Il2CppObject, quality: Gr
 extern "C" fn ApplyGraphicsQuality(this: *mut Il2CppObject, quality: GraphicsQuality, force: bool) {
     let custom_quality = Hachimi::instance().config.load().graphics_quality;
     if custom_quality != GraphicsQuality::Default {
+        crate::core::utils::size_trace::event_msg("ApplyGraphicsQuality", &format!(
+            "requested={:?} force={} -> applied={:?} force=true",
+            quality, force, custom_quality
+        ));
         return get_orig_fn!(ApplyGraphicsQuality, ApplyGraphicsQualityFn)(this, custom_quality, true);
     }
 
+    crate::core::utils::size_trace::event_msg("ApplyGraphicsQuality", &format!(
+        "requested={:?} force={} (passthrough)", quality, force
+    ));
     get_orig_fn!(ApplyGraphicsQuality, ApplyGraphicsQualityFn)(this, quality, force);
 }
 

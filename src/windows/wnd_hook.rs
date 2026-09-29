@@ -443,6 +443,17 @@ extern "system" fn wnd_proc(hwnd: HWND, umsg: c_uint, wparam: WPARAM, lparam: LP
         return unsafe { DefWindowProcW(hwnd, umsg, wparam, lparam) };
     };
 
+    // Observe window size changes in every mode (change-triggered, debug-only).
+    if umsg == WM_SIZE && crate::core::utils::size_trace::enabled() {
+        let width = (lparam.0 & 0xFFFF) as u16 as i32;
+        let height = ((lparam.0 >> 16) & 0xFFFF) as u16 as i32;
+        if wparam.0 != SIZE_MINIMIZED as usize && width > 0 && height > 0 {
+            crate::core::utils::size_trace::event_msg("WM_SIZE", &format!(
+                "{}x{} wparam={:#x} freeform={}", width, height, wparam.0, freeform_window
+            ));
+        }
+    }
+
     if Hachimi::instance().game.region != Region::Global {
         if freeform_window {
             if umsg == WM_SYSKEYDOWN &&

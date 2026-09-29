@@ -239,7 +239,7 @@ pub enum FullScreenMode {
     FullScreenWindow = FullScreenMode_FullScreenWindow
 }
 
-#[derive(Deserialize, Serialize, Copy, Clone, Default, Eq, PartialEq)]
+#[derive(Deserialize, Serialize, Copy, Clone, Default, Eq, PartialEq, Hash)]
 pub enum ResolutionScaling {
     #[default] Default,
     ScaleToScreenSize,
