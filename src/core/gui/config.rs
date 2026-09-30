@@ -424,12 +424,16 @@ impl ConfigEditor {
 
     /// Option-slider row: switch inline (enable/disable), then slider below when on.
     /// The whole tile — whether expanded or collapsed — ends with a consistent 8dp gap.
+    /// `step`/`decimals` control the slider granularity and number-field precision
+    /// (e.g. `(0.1, 1)` for finicky f32 values like shadow biases).
     /// Returns the Switch response so callers can detect the toggle event.
     pub fn list_tile_option_slider<Num: egui::emath::Numeric>(
         ui: &mut egui::Ui,
         label: &str,
         value: &mut Option<Num>,
         range: RangeInclusive<Num>,
+        step: f64,
+        decimals: usize,
     ) -> egui::Response {
         if Self::row_filtered(label) { return hidden_response(ui); }
         Self::maybe_draw_category_header(ui);
@@ -447,7 +451,7 @@ impl ConfigEditor {
             if let Some(num) = value.as_mut() {
                 let mut val_f  = num.to_f64() as f32;
                 let range_f    = (range.start().to_f64() as f32)..=(range.end().to_f64() as f32);
-                if slider_with_input(ui, &mut val_f, range_f, 1.0, 0).changed() {
+                if slider_with_input(ui, &mut val_f, range_f, step, decimals).changed() {
                     *num = Num::from_f64(val_f as f64);
                 }
             }

@@ -15,13 +15,13 @@ use crate::il2cpp::hook::UnityEngine_CoreModule::Texture::AnisoLevel;
 #[allow(unused_variables)]
 pub fn render(editor: &ConfigEditor, config: &mut crate::core::hachimi::Config, ui: &mut egui::Ui) {
 
-    ConfigEditor::list_tile_option_slider(ui, &t!("config_editor.target_fps"), &mut config.target_fps, 30..=240);
+    ConfigEditor::list_tile_option_slider(ui, &t!("config_editor.target_fps"), &mut config.target_fps, 30..=240, 1.0, 0);
 
     // Unfocused FPS cap — independent of the focused Target FPS option.
     #[cfg(target_os = "windows")]
     {
         ConfigEditor::list_tile_option_slider(
-            ui, &t!("config_editor.target_fps_unfocused"), &mut config.windows.target_fps_unfocused, 1..=240
+            ui, &t!("config_editor.target_fps_unfocused"), &mut config.windows.target_fps_unfocused, 1..=240, 1.0, 0
         );
     }
     ConfigEditor::list_tile_slider(ui, t!("config_editor.virtual_resolution_multiplier"), &mut config.virtual_res_mult, 1.0..=4.0, 0.1, 1);
@@ -53,8 +53,9 @@ pub fn render(editor: &ConfigEditor, config: &mut crate::core::hachimi::Config, 
             (SoftShadowQuality::Medium, &t!("medium")),
             (SoftShadowQuality::High, &t!("high")),
         ]);
-        ConfigEditor::list_tile_option_slider(ui, &t!("config_editor.shadow_depth_bias"), &mut config.shadow_depth_bias, 0.0..=5.0);
-        ConfigEditor::list_tile_option_slider(ui, &t!("config_editor.shadow_normal_bias"), &mut config.shadow_normal_bias, 0.0..=10.0);
+        // Bias values are finicky — 0.1 steps with one decimal (0.4, not 0.45).
+        ConfigEditor::list_tile_option_slider(ui, &t!("config_editor.shadow_depth_bias"), &mut config.shadow_depth_bias, 0.0..=5.0, 0.1, 1);
+        ConfigEditor::list_tile_option_slider(ui, &t!("config_editor.shadow_normal_bias"), &mut config.shadow_normal_bias, 0.0..=10.0, 0.1, 1);
         ConfigEditor::list_tile_switch(ui, t!("config_editor.force_chara_shadows"), &mut config.force_chara_shadows, true);
         ConfigEditor::list_tile_combo(ui, t!("config_editor.story_shadow_type"), "story_shadow_type", &mut config.story_shadow_type, &[
             (ShadowType3d::Default, &t!("default")),

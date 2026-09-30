@@ -295,6 +295,8 @@ impl AppWindow for FirstTimeSetupWindow {
                                             &t!("config_editor.target_fps"),
                                             &mut self.config.target_fps,
                                             30..=240,
+                                            1.0,
+                                            0,
                                         );
 
                                         // 2. Menu Open Keybind — label top, chip + bind button bottom
