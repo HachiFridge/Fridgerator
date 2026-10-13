@@ -15,6 +15,25 @@ pub static META_DATA: Lazy<RwLock<MetaData>> = Lazy::new(|| RwLock::new(MetaData
 pub static TDQ_IS_SKILL_LEARNING_QUERY: AtomicBool = AtomicBool::new(false);
 pub static IS_SYSTEM_TEXT_QUERY: AtomicBool = AtomicBool::new(false);
 
+/// Sets `flag` for the duration of `callback` and reliably clears it on exit.
+///
+/// Plain `store(true)` / `store(false)` around the callback leaks a stuck flag
+/// if the callback unwinds: C# exceptions can unwind through our hooks, and a
+/// stuck `TDQ_IS_SKILL_LEARNING_QUERY` would force-wrap every subsequent text
+/// generation in the game. The Drop guard makes the flag unwind-safe.
+pub fn with_atomic_flag_set(flag: &AtomicBool, callback: impl FnOnce()) {
+    struct Guard<'a>(&'a AtomicBool);
+    impl Drop for Guard<'_> {
+        fn drop(&mut self) {
+            self.0.store(false, atomic::Ordering::Relaxed);
+        }
+    }
+
+    flag.store(true, atomic::Ordering::Relaxed);
+    let _guard = Guard(flag);
+    callback();
+}
+
 static mut ORIG_SQLITE3_OPEN_V2: Option<extern "C" fn(*const i8, *mut *mut std::ffi::c_void, i32, *const i8) -> i32> = None;
 static mut ORIG_SQLITE3_KEY: Option<extern "C" fn(*mut std::ffi::c_void, *const std::ffi::c_void, i32) -> i32> = None;
 
@@ -249,9 +268,7 @@ pub struct TextFormatting {
 
 impl TextDataQuery {
     pub fn with_skill_learning_query(callback: impl FnOnce()) {
-        TDQ_IS_SKILL_LEARNING_QUERY.store(true, atomic::Ordering::Relaxed);
-        callback();
-        TDQ_IS_SKILL_LEARNING_QUERY.store(false, atomic::Ordering::Relaxed);
+        with_atomic_flag_set(&TDQ_IS_SKILL_LEARNING_QUERY, callback);
     }
 
     pub fn get_skill_name(index: i32) -> Option<*mut Il2CppString> {

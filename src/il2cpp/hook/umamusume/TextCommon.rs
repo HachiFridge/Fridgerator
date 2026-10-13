@@ -1,5 +1,3 @@
-use std::sync::atomic::Ordering;
-
 use crate::{
     core::Hachimi,
     il2cpp::{
@@ -64,10 +62,12 @@ extern "C" fn Awake(this: *mut Il2CppObject) {
 
 /// Sets IS_SYSTEM_TEXT_QUERY for the duration of the callback so GallopUtil
 /// knows to skip its own wrapping on text that we're already handling.
+///
+/// Uses the shared unwind-safe guard so an exception unwinding through the
+/// wrapped call can't leave the flag stuck (which would force-wrap all
+/// subsequent text generation).
 fn with_system_text_query(callback: impl FnOnce()) {
-    IS_SYSTEM_TEXT_QUERY.store(true, Ordering::Relaxed);
-    callback();
-    IS_SYSTEM_TEXT_QUERY.store(false, Ordering::Relaxed);
+    crate::il2cpp::sql::with_atomic_flag_set(&IS_SYSTEM_TEXT_QUERY, callback);
 }
 
 // Force best fit and native wrapping bounds for system text

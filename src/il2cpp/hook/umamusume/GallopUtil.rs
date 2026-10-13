@@ -12,13 +12,20 @@ extern "C" fn LineHeadWrapCommon(
         return s;
     }
 
-    if TDQ_IS_SKILL_LEARNING_QUERY.load(Ordering::Relaxed) || IS_SYSTEM_TEXT_QUERY.load(Ordering::Relaxed) || unsafe { utils::game_str_has_newline(s) } {
+    if TDQ_IS_SKILL_LEARNING_QUERY.load(Ordering::Relaxed) || IS_SYSTEM_TEXT_QUERY.load(Ordering::Relaxed) {
         // assume prewrapped or expansion requested, let the game handle it (or do nothing)
         return s;
     }
 
+    // Wrap before falling back on the newline check (wrap-order fix from
+    // upstream kairusds): text containing `\n` escapes used to bypass our
+    // wrapper entirely even though the wrapper handles it fine. Only leave the
+    // string untouched when wrapping fails AND it already has line breaks.
     if let Some(wrapped) = unsafe { utils::wrap_text_il2cpp(s, line_char_count) } {
         return wrapped;
+    }
+    if unsafe { utils::game_str_has_newline(s) } {
+        return s;
     }
     get_orig_fn!(LineHeadWrapCommon, LineHeadWrapCommonFn)(s, line_char_count, handling_type, is_match_delegate)
 }
