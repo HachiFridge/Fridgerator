@@ -401,8 +401,8 @@ update_prompt_dialog:
     aplicar la actualización.
   android_content: |
     Se ha encontrado una nueva actualización de Hachimi Edge (%{version}).\n¿Quieres instalarla ahora?
-    Pulsa "Sí" para abrir UmaPatcher Edge para volver a parchear el juego.
-    (No es necesario volver a descargar el juego o los APK, solo parchea el juego nuevamente como normalmente lo harías. UmaPatcher Edge siempre descargará la nueva versión de Hachimi Edge.)
+    Pulsa "Sí" para abrir HachiDroid para volver a parchear el juego.
+    (No es necesario volver a descargar el juego o los APK, solo parchea el juego nuevamente como normalmente lo harías. HachiDroid siempre descargará la nueva versión de Hachimi Edge.)
 
 
 updating_dialog: 

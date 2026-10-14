@@ -404,7 +404,7 @@ update_prompt_dialog:
   android_content: |
     检测到 Hachimi Edge 的新版本 (%{version})。
 
-    是否要打开 UmaPatcher Edge 以开始更新？
+    是否要打开 HachiDroid 以开始更新？
 
 
 updating_dialog: 

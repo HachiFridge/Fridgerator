@@ -400,8 +400,8 @@ update_prompt_dialog:
     Game sẽ được khởi động lại để áp dụng bản cập nhật.
   android_content: |
     Đã có bản cập nhật Hachimi Edge mới (%{version}). Bạn có muốn cài đặt không?
-    Nhấn "Có" để mở UmaPatcher Edge và patch lại game hiện tại của bạn.
-    (Không cần tải lại toàn bộ game hay APK, bạn chỉ cần patch lại như bình thường vì UmaPatcher Edge luôn tự tải về phiên bản Hachimi Edge mới nhất.)
+    Nhấn "Có" để mở HachiDroid và patch lại game hiện tại của bạn.
+    (Không cần tải lại toàn bộ game hay APK, bạn chỉ cần patch lại như bình thường vì HachiDroid luôn tự tải về phiên bản Hachimi Edge mới nhất.)
 
 
 updating_dialog: 

@@ -398,8 +398,8 @@ update_prompt_dialog:
   android_content: |
     A new Hachimi Edge update is available (%{version}). Do you want to install it?
 
-    Tap "Yes" to open UmaPatcher Edge and re-patch your current game.
-    (No full game or APK re-download required, you only need to patch again like you normally would as UmaPatcher Edge always downloads the latest Hachimi Edge version.)
+    Tap "Yes" to open HachiDroid and re-patch your current game.
+    (No full game or APK re-download required, you only need to patch again like you normally would as HachiDroid always downloads the latest Hachimi Edge version. If HachiDroid is not installed, UmaPatcher Edge opens instead.)
 
 updating_dialog:
   title: "Updating"

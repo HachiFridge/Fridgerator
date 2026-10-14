@@ -32,6 +32,9 @@ pub const REPO_PATH: &str = "Tenshou170/Hachimi-Edge";
 pub const GITHUB_API: &str = "https://api.github.com/repos";
 pub const CODEBERG_API: &str = "https://codeberg.org/api/v1/repos";
 pub const WEBSITE_URL: &str = "https://hachimi.noccu.art";
+/// Deeplink into HachiDroid, the primary supported patcher app.
+pub const HACHIDROID_UPDATER_DEEPLINK: &str = "hachidroid://update-hachimi";
+/// Fallback deeplink for devices still running UmaPatcher-Edge.
 pub const UMAPATCHER_UPDATER_DEEPLINK: &str = "umapatcher-edge://update-hachimi";
 
 pub static CONFIG_LOAD_ERROR: AtomicBool = AtomicBool::new(false);

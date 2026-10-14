@@ -406,8 +406,8 @@ update_prompt_dialog:
     Ire-restart ang laro para ma-apply ang update.
   android_content: |
     May bagong update na available para sa Hachimi (%{version}). Gusto mo ba ito i-install?
-    Pindutin ang "Oo" para buksan ang UmaPatcher Edge at i-patch muli ang laro.
-    (Hindi kailangang i-download muli ang laro o APK, kailangan mo lang mag-patch muli tulad ng dati mong ginamit na method dahil palaging dina-download ng UmaPatcher Edge ang pinakabagong version ng Hachimi Edge.)
+    Pindutin ang "Oo" para buksan ang HachiDroid at i-patch muli ang laro.
+    (Hindi kailangang i-download muli ang laro o APK, kailangan mo lang mag-patch muli tulad ng dati mong ginamit na method dahil palaging dina-download ng HachiDroid ang pinakabagong version ng Hachimi Edge.)
 
 
 updating_dialog: 

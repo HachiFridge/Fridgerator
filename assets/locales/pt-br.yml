@@ -405,8 +405,8 @@ update_prompt_dialog:
     O jogo será reiniciado para aplicar a atualização.
   android_content: |
     Uma nova atualização do Hachimi Edge está disponível (%{version}). Deseja instalá-la?
-    Toque em "Sim" para abrir o UmaPatcher Edge e reaplicar o patch no jogo.
-    (Não será necessário baixar os APKs do jogo novamente. Basta apenas aplicar o patch mais uma vez para que o UmaPatcher Edge instale a última versão do Hachimi Edge.)
+    Toque em "Sim" para abrir o HachiDroid e reaplicar o patch no jogo.
+    (Não será necessário baixar os APKs do jogo novamente. Basta apenas aplicar o patch mais uma vez para que o HachiDroid instale a última versão do Hachimi Edge.)
 
 
 updating_dialog: 

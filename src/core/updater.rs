@@ -135,10 +135,16 @@ impl Updater {
         #[cfg(target_os = "android")]
         {
             use crate::{
-                core::hachimi::UMAPATCHER_UPDATER_DEEPLINK,
-                il2cpp::{ext::StringExt, hook::UnityEngine_CoreModule::Application}
+                android::utils::open_url_in_app_or_fallback,
+                core::hachimi::{HACHIDROID_UPDATER_DEEPLINK, UMAPATCHER_UPDATER_DEEPLINK}
             };
-            Application::OpenURL(UMAPATCHER_UPDATER_DEEPLINK.to_il2cpp_string());
+            // HachiDroid is the primary supported patcher; UmaPatcher-Edge stays
+            // reachable as the fallback while existing installs remain.
+            open_url_in_app_or_fallback(
+                "dev.tenshou170.hachidroid",
+                HACHIDROID_UPDATER_DEEPLINK,
+                UMAPATCHER_UPDATER_DEEPLINK
+            );
         }
     }
 

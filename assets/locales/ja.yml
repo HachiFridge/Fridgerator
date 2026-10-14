@@ -397,8 +397,8 @@ update_prompt_dialog:
   android_content: |
     新しい Hachimi Edge のアップデートがあります (%{version})。インストールしますか？
 
-    「はい」をタップすると UmaPatcher Edge が開き、現在のゲームに再パッチします。
-    （ゲーム本体や APK の再ダウンロードは不要です。UmaPatcher Edge は常に最新の
+    「はい」をタップすると HachiDroid が開き、現在のゲームに再パッチします。
+    （ゲーム本体や APK の再ダウンロードは不要です。HachiDroid は常に最新の
     Hachimi Edge をダウンロードするため、普段どおりに再パッチするだけです。）
 
 updating_dialog:

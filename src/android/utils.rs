@@ -310,6 +310,72 @@ pub fn open_app_or_fallback(package_name: &str, activity_class: &str, fallback_u
     }
 }
 
+/// Opens `primary_url` via ACTION_VIEW targeted at `primary_package` only.
+/// If that app is missing (or refuses the intent), falls back to opening
+/// `fallback_url` with no package restriction.
+///
+/// Package visibility on Android 11+ would make a PackageManager query fail
+/// from apps that don't declare `<queries>` for the target, but startActivity
+/// resolution is exempt, so we probe by launching instead of asking.
+#[allow(dead_code)]
+pub fn open_url_in_app_or_fallback(primary_package: &str, primary_url: &str, fallback_url: &str) {
+    let vm = match java_vm() {
+        Some(v) => v,
+        None => return,
+    };
+
+    let mut env = match vm.attach_current_thread_as_daemon() {
+        Ok(e) => e,
+        Err(_) => return,
+    };
+
+    let try_open = |env: &mut JNIEnv| -> jni::errors::Result<()> {
+        let activity = get_activity(unsafe { env.unsafe_clone() }).ok_or(jni::errors::Error::JavaException)?;
+
+        let uri_class = env.find_class("android/net/Uri")?;
+        let url_java = env.new_string(primary_url)?;
+        let uri_obj = env.call_static_method(
+            &uri_class,
+            "parse",
+            "(Ljava/lang/String;)Landroid/net/Uri;",
+            &[JValue::from(&url_java)]
+        )?.l()?;
+
+        let action_java = env.new_string("android.intent.action.VIEW")?;
+        let intent_class = env.find_class("android/content/Intent")?;
+        let intent_obj = env.new_object(
+            &intent_class,
+            "(Ljava/lang/String;Landroid/net/Uri;)V",
+            &[JValue::from(&action_java), JValue::from(&uri_obj)]
+        )?;
+
+        let pkg_java = env.new_string(primary_package)?;
+        env.call_method(
+            &intent_obj,
+            "setPackage",
+            "(Ljava/lang/String;)Landroid/content/Intent;",
+            &[JValue::from(&pkg_java)]
+        )?;
+
+        env.call_method(&activity, "startActivity", "(Landroid/content/Intent;)V", &[JValue::from(&intent_obj)])?;
+        Ok(())
+    };
+
+    if let Err(_e) = try_open(&mut env) {
+        if env.exception_check().unwrap_or(false) {
+            if let Ok(_ex) = env.exception_occurred() {
+                let _ = env.exception_clear();
+            }
+        }
+        info!(
+            "open_url_in_app_or_fallback: could not open {} in {}, falling back to {}",
+            primary_url, primary_package, fallback_url
+        );
+        let url_ptr = fallback_url.to_il2cpp_string();
+        Application::OpenURL(url_ptr);
+    }
+}
+
 pub fn get_activity(mut env: JNIEnv<'_>) -> Option<JObject<'_>> {
     // 1. Try cached UnityPlayer class first (cached in JNI_OnLoad with app class loader)
     if let Some(unity_player_gref) = super::main::get_unity_player_class() {

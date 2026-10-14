@@ -398,8 +398,8 @@ update_prompt_dialog:
     The game will be restarted in order to apply the update.
   android_content: |
     Update Hachimi Edge baru tersedia (%{version}). Apakah Anda ingin menginstalnya?
-    Ketuk "Ya" untuk membuka UmaPatcher Edge dan re-patch game Anda.
-    (Tidak perlu download ulang full game atau APK, Anda hanya perlu patch lagi seperti biasanya karena UmaPatcher Edge selalu mendownload versi Hachimi Edge terbaru.)
+    Ketuk "Ya" untuk membuka HachiDroid dan re-patch game Anda.
+    (Tidak perlu download ulang full game atau APK, Anda hanya perlu patch lagi seperti biasanya karena HachiDroid selalu mendownload versi Hachimi Edge terbaru.)
 
 
 updating_dialog: 
