@@ -408,8 +408,8 @@ impl AppWindow for ThemeEditorWindow {
             self.translucency_mode = hachimi::UiTranslucencyMode::None;
             self.manual_colors.clear();
             self.manual_primary = hachimi::Config::default_ui_theme_seed();
-            self.manual_surface = egui::Color32::from_rgb(18, 18, 18);
-            self.manual_on_surface = egui::Color32::from_rgb(220, 220, 220);
+            self.manual_surface = egui::Color32::from_rgb(22, 18, 13);
+            self.manual_on_surface = egui::Color32::from_rgb(238, 225, 212);
             enqueue_theme_preview(self.build_preview_config());
         }
 

@@ -222,6 +222,9 @@ impl Hachimi {
             match serde_json::from_str::<Config>(&json) {
                 Ok(mut config) => {
                     config.ui_theme_json = None;
+                    if config.ui_theme_seed == egui::Color32::from_rgb(100, 150, 240) {
+                        config.ui_theme_seed = Config::default_ui_theme_seed();
+                    }
                     Ok(config)
                 }
                 Err(e) => {
@@ -232,6 +235,9 @@ impl Hachimi {
                         let sanitized_json = fs::read_to_string(&config_path)?;
                         if let Ok(mut config) = serde_json::from_str::<Config>(&sanitized_json) {
                             config.ui_theme_json = None;
+                            if config.ui_theme_seed == egui::Color32::from_rgb(100, 150, 240) {
+                                config.ui_theme_seed = Config::default_ui_theme_seed();
+                            }
                             return Ok(config);
                         }
                     }
@@ -1298,7 +1304,7 @@ impl Config {
         2025
     }
     pub fn default_ui_theme_seed() -> egui::Color32 {
-        egui::Color32::from_rgb(100, 150, 240)
+        egui::Color32::from_rgb(255, 185, 81)
     }
     fn default_ui_theme_mode() -> UiThemeMode {
         UiThemeMode::Dark
