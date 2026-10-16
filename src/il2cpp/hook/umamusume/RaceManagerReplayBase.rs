@@ -1,4 +1,4 @@
-use std::sync::atomic::Ordering;
+use std::sync::atomic::{AtomicBool, Ordering};
 use crate::{
     core::{Hachimi, game::Region, gui, utils::{clear_il2cpp_list, race_seek_seh, race_seek_stage}},
     il2cpp::{
@@ -318,6 +318,30 @@ fn resync_used_skills(race_manager: *mut Il2CppObject, target_time: f32) {
 pub fn playback_gated(race_manager: *mut Il2CppObject) -> bool {
     HorseRaceInfo::is_start_dash_instance(race_manager) ||
     get_IsPlayingCutIn(race_manager)
+}
+
+// Cached copy of playback_gated() for the GUI thread (ported from kairusds
+// Hachimi-Edge 3862181, "Fix #249"): playback_gated() reaches into il2cpp
+// objects, so calling it from the egui thread races the il2cpp thread and can
+// crash (il2cpp objects are not thread-safe). The cache is refreshed once per
+// frame from GameSystem::Update (il2cpp thread) and only read elsewhere.
+static PLAYBACK_GATED_CACHE: AtomicBool = AtomicBool::new(false);
+
+pub fn refresh_playback_gated_cache() {
+    if !RaceHorseManagerBase::is_race_active() {
+        PLAYBACK_GATED_CACHE.store(false, Ordering::Release);
+        return;
+    }
+    let race_manager = RaceManager::instance();
+    PLAYBACK_GATED_CACHE.store(
+        !race_manager.is_null() && playback_gated(race_manager),
+        Ordering::Release
+    );
+}
+
+/// Thread-safe read of the playback gating state for GUI-thread callers.
+pub fn playback_gated_cached() -> bool {
+    PLAYBACK_GATED_CACHE.load(Ordering::Acquire)
 }
 
 pub fn toggle_playback() {

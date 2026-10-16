@@ -1179,7 +1179,9 @@ impl Gui {
         let game_view = screen;
 
         let paused = RaceManagerReplayBase::IsPaused(race_manager);
-        let interactable = !RaceManagerReplayBase::playback_gated(race_manager);
+        // il2cpp-thread-updated cache: calling playback_gated() directly here
+        // would race the il2cpp thread (kairusds #249).
+        let interactable = !RaceManagerReplayBase::playback_gated_cached();
 
         let btn_size = 48.0 * scale;
         let margin = 12.0 * scale;

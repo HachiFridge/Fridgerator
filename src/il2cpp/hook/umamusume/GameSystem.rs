@@ -35,6 +35,9 @@ fn apply_free_camera_live_pause_request() {
 
 extern "C" fn GameSystem_Update(this: *mut Il2CppObject) {
     crate::core::gui::race_slider_drain();
+    // Refresh GUI-facing race state caches while we're on the il2cpp thread:
+    // egui must not reach into il2cpp objects directly (kairusds #249 fix).
+    super::RaceManagerReplayBase::refresh_playback_gated_cache();
     // catch_unwind, not a bare call: this is new, less-battle-tested code running every
     // frame on the main thread - a panic here must not be allowed to take the whole
     // process down with it (matches the defensive pattern the race-director-plugin this
