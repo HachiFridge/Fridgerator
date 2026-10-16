@@ -541,8 +541,10 @@ extern "system" fn wnd_proc(hwnd: HWND, umsg: c_uint, wparam: WPARAM, lparam: LP
                     Thread::main_thread().schedule(Gui::toggle_game_ui);
                 }
 
-                if current_key == Hachimi::instance().config.load().windows.race_playback_key
-                    && Hachimi::instance().config.load().race_playback_key_enable {
+                let cfg = Hachimi::instance().config.load();
+                if current_key == cfg.windows.race_playback_key
+                    && cfg.race_playback_slider
+                    && cfg.race_playback_key_enable {
                     Thread::main_thread().schedule(umamusume::RaceManagerReplayBase::toggle_playback);
                 }
             }

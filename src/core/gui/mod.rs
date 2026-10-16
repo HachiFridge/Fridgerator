@@ -1134,7 +1134,9 @@ impl Gui {
         use crate::il2cpp::hook::umamusume::{RaceHorseManagerBase, RaceManager, SceneManager};
         use crate::core::race_director;
 
-        if !Hachimi::instance().config.load().race_playback_button
+        let config = Hachimi::instance().config.load();
+        if !config.race_playback_slider
+            || !config.race_playback_button
             || !RaceHorseManagerBase::is_race_active()
             || !race_director::is_gate_open()
             || race_director::is_race_finished()

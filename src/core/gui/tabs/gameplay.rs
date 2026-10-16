@@ -123,31 +123,29 @@ pub fn render(editor: &ConfigEditor, config: &mut crate::core::hachimi::Config, 
     ConfigEditor::list_tile_switch(ui, t!("config_editor.race_playback_slider"), &mut config.race_playback_slider, true);
     if config.race_playback_slider {
         ConfigEditor::list_tile_switch(ui, t!("config_editor.race_playback_slider_always"), &mut config.race_playback_slider_always, true);
-    }
-    ConfigEditor::list_tile_switch(ui, t!("config_editor.race_playback_button"), &mut config.race_playback_button, true);
-    ConfigEditor::list_tile_switch(ui, t!("config_editor.race_playback_key_enable"), &mut config.race_playback_key_enable, true);
+        ConfigEditor::list_tile_switch(ui, t!("config_editor.race_playback_button"), &mut config.race_playback_button, true);
 
-    if config.race_playback_key_enable {
         #[cfg(target_os = "windows")]
-        let key_label = crate::windows::utils::vk_to_display_label(config.windows.race_playback_key);
-        #[cfg(target_os = "android")]
-        let key_label = crate::android::gui_impl::keymap::keycode_display_label(config.android.race_playback_key);
+        {
+            ConfigEditor::list_tile_switch(ui, t!("config_editor.race_playback_key_enable"), &mut config.race_playback_key_enable, true);
 
-        if ConfigEditor::list_tile_keybind(ui, t!("config_editor.race_playback_key"), key_label, t!("bind_key")) {
-            thread::spawn(|| {
-                let Some(gui_mutex) = Gui::instance() else { return };
-                let mut gui = gui_mutex.lock().unwrap_or_else(|e| e.into_inner());
-                gui.show_window(Box::new(crate::core::gui::windows::SetKeybindWindow::new(|result| {
-                    let Some(raw) = result else { return };
-                    let hachimi = crate::core::Hachimi::instance();
-                    let mut new_config = hachimi.config.load().as_ref().clone();
-                    #[cfg(target_os = "windows")]
-                    { new_config.windows.race_playback_key = raw; }
-                    #[cfg(target_os = "android")]
-                    { new_config.android.race_playback_key = raw; }
-                    crate::core::gui::save_and_reload_config(new_config);
-                })));
-            });
+            if config.race_playback_key_enable {
+                let key_label = crate::windows::utils::vk_to_display_label(config.windows.race_playback_key);
+
+                if ConfigEditor::list_tile_keybind(ui, t!("config_editor.race_playback_key"), key_label, t!("bind_key")) {
+                    thread::spawn(|| {
+                        let Some(gui_mutex) = Gui::instance() else { return };
+                        let mut gui = gui_mutex.lock().unwrap_or_else(|e| e.into_inner());
+                        gui.show_window(Box::new(crate::core::gui::windows::SetKeybindWindow::new(|result| {
+                            let Some(raw) = result else { return };
+                            let hachimi = crate::core::Hachimi::instance();
+                            let mut new_config = hachimi.config.load().as_ref().clone();
+                            new_config.windows.race_playback_key = raw;
+                            crate::core::gui::save_and_reload_config(new_config);
+                        })));
+                    });
+                }
+            }
         }
     }
 
