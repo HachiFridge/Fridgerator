@@ -422,6 +422,23 @@ impl ConfigEditor {
         }).inner
     }
 
+    /// Keybind row: label on top, MaterialChip showing key name on left, "Bind" button right.
+    /// Automatically handles search filtering and category headers.
+    /// Returns true if either the chip or button was clicked.
+    pub fn list_tile_keybind(
+        ui: &mut egui::Ui,
+        label: impl Into<egui::WidgetText>,
+        key_label: impl AsRef<str>,
+        button_text: impl Into<egui::WidgetText>,
+    ) -> bool {
+        let label = label.into();
+        if Self::row_filtered(label.text()) { return false; }
+        Self::maybe_draw_category_header(ui);
+        let clicked = keybind_row(ui, label, key_label, button_text);
+        Self::space(ui, 4.0);
+        clicked
+    }
+
     /// Option-slider row: switch inline (enable/disable), then slider below when on.
     /// The whole tile — whether expanded or collapsed — ends with a consistent 8dp gap.
     /// `step`/`decimals` control the slider granularity and number-field precision

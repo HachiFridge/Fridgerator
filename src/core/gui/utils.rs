@@ -354,13 +354,41 @@ pub fn simple_window_layout(
     });
 }
 
+/// Material Design 3 keybind row helper.
+///
+/// Displays setting name label on top, an M3 `MaterialChip::assist` on the left,
+/// and an outlined action button on the right.
+/// Returns `true` if either the chip or the button was clicked.
+pub fn keybind_row(
+    ui: &mut egui::Ui,
+    label: impl Into<egui::WidgetText>,
+    key_label: impl AsRef<str>,
+    button_text: impl Into<egui::WidgetText>,
+) -> bool {
+    ui.add(egui::Label::new(label).wrap());
+    let mut clicked = false;
+    ui.horizontal(|ui| {
+        ui.spacing_mut().item_spacing.x = 8.0;
+        if ui.add(MaterialChip::assist(key_label.as_ref())).clicked() {
+            clicked = true;
+        }
+        ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+            if ui.add(MaterialButton::outlined(button_text)).clicked() {
+                clicked = true;
+            }
+        });
+    });
+    clicked
+}
+
 /// Returns an `egui::Frame` styled as a grouped settings section:
-/// `surfaceContainerHigh` background, 12dp corner radius, 12×8 inner margin.
+/// `surfaceContainerHigh` background, corner radius from theme (defaults to 12dp), 12×8 inner margin.
 /// Used by ThemeEditorWindow and any future settings sub-groups.
 pub fn section_group_frame() -> egui::Frame {
+    let cr = egui_material3::theme::get_global_corner_radius().unwrap_or(12.0);
     egui::Frame::NONE
         .fill(egui_material3::theme::get_global_color("surfaceContainerHigh"))
-        .corner_radius(12.0)
+        .corner_radius(cr)
         .inner_margin(egui::Margin::symmetric(12, 8))
 }
 
@@ -552,7 +580,7 @@ pub fn settings_card(ui: &mut egui::Ui, add_contents: impl FnOnce(&mut egui::Ui)
     egui::Frame::NONE
         .fill(surface_low)
         .stroke(egui::Stroke::new(1.0_f32, outline_variant))
-        .corner_radius(egui::CornerRadius::same(cr.unwrap_or(8.0).max(8.0) as u8))
+        .corner_radius(egui::CornerRadius::same(cr.unwrap_or(12.0) as u8))
         .inner_margin(egui::Margin { left: 0, right: 0, top: 4, bottom: 4 })
         .show(ui, add_contents);
 

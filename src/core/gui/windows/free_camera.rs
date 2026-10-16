@@ -226,44 +226,20 @@ impl FreeCameraWindow {
     ) {
         let label = label.into();
         let key_label = crate::windows::utils::vk_to_display_label(*vk);
-        let secondary_container = get_global_color("secondaryContainer");
-        let on_secondary_container = get_global_color("onSecondaryContainer");
-        let key_galley = ui.painter().layout_no_wrap(
-            key_label.to_string(),
-            ui.style().text_styles[&egui::TextStyle::Body].clone(),
-            egui::Color32::WHITE,
-        );
-        let chip_w = key_galley.size().x + 16.0;
-
-        ui.add(egui::Label::new(label).wrap());
-        ui.horizontal(|ui| {
-            ui.spacing_mut().item_spacing.x = 8.0;
-            let (chip_rect, _) = ui.allocate_exact_size(egui::vec2(chip_w, 28.0), egui::Sense::hover());
-            ui.painter().rect_filled(chip_rect, 6.0, secondary_container);
-            ui.painter().text(
-                chip_rect.center(),
-                egui::Align2::CENTER_CENTER,
-                key_label,
-                ui.style().text_styles[&egui::TextStyle::Body].clone(),
-                on_secondary_container,
-            );
-            ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                if ui.add(MaterialButton::outlined(t!("bind_key"))).clicked() {
-                    let ptr = vk as *mut u16 as usize;
-                    thread::spawn(move || {
-                        let Some(gui_mutex) = Gui::instance() else { return };
-                        let mut gui = gui_mutex.lock().unwrap_or_else(|e| e.into_inner());
-                        gui.show_window(Box::new(SetKeybindWindow::new(move |result| {
-                            if let Some(raw) = result {
-                                unsafe {
-                                    *(ptr as *mut u16) = raw;
-                                }
-                            }
-                        })));
-                    });
-                }
+        if keybind_row(ui, label, key_label, t!("bind_key")) {
+            let ptr = vk as *mut u16 as usize;
+            thread::spawn(move || {
+                let Some(gui_mutex) = Gui::instance() else { return };
+                let mut gui = gui_mutex.lock().unwrap_or_else(|e| e.into_inner());
+                gui.show_window(Box::new(SetKeybindWindow::new(move |result| {
+                    if let Some(raw) = result {
+                        unsafe {
+                            *(ptr as *mut u16) = raw;
+                        }
+                    }
+                })));
             });
-        });
+        }
         ui.add_space(4.0);
     }
 }

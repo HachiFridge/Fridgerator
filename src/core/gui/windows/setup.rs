@@ -313,55 +313,25 @@ impl AppWindow for FirstTimeSetupWindow {
                                         #[cfg(target_os = "android")]
                                         let key_label = crate::android::gui_impl::keymap::keycode_display_label(self.config.android.menu_open_key);
 
-                                        let secondary_container    = get_global_color("secondaryContainer");
-                                        let on_secondary_container = get_global_color("onSecondaryContainer");
-
-                                        let key_galley = ui.painter().layout_no_wrap(
-                                            key_label.to_string(),
-                                            ui.style().text_styles[&egui::TextStyle::Body].clone(),
-                                            egui::Color32::WHITE,
-                                        );
-                                        let chip_w = key_galley.size().x + 16.0;
-
-                                        // Top line: setting name
-                                        ui.add(egui::Label::new(t!("config_editor.menu_open_key")).wrap());
-                                        // Bottom line: chip left, "Set" button right
-                                        ui.horizontal(|ui| {
-                                            ui.spacing_mut().item_spacing.x = 8.0;
-                                            let (chip_rect, _) = ui.allocate_exact_size(
-                                                egui::vec2(chip_w, 28.0),
-                                                egui::Sense::hover(),
-                                            );
-                                            ui.painter().rect_filled(chip_rect, 6.0, secondary_container);
-                                            ui.painter().text(
-                                                chip_rect.center(),
-                                                egui::Align2::CENTER_CENTER,
-                                                key_label,
-                                                ui.style().text_styles[&egui::TextStyle::Body].clone(),
-                                                on_secondary_container,
-                                            );
-                                            ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                                                if ui.add(MaterialButton::outlined(t!("config_editor.menu_open_key_set"))).clicked() {
-                                                    let keybind_slot = self.pending_keybind.clone();
-                                                    std::thread::spawn(move || {
-                                                        let Some(gui_mutex) = Gui::instance() else { return };
-                                                        let mut gui = gui_mutex.lock().unwrap_or_else(|e| e.into_inner());
-                                                        gui.show_window(Box::new(SetKeybindWindow::new(move |result| {
-                                                            let Some(raw) = result else { return };
-                                                            let hachimi = Hachimi::instance();
-                                                            let mut new_config = hachimi.config.load().as_ref().clone();
-                                                            #[cfg(target_os = "windows")]
-                                                            { new_config.windows.menu_open_key = raw; }
-                                                            #[cfg(target_os = "android")]
-                                                            { new_config.android.menu_open_key = raw; }
-                                                            save_and_reload_config(new_config);
-                                                            *keybind_slot.lock().unwrap() = Some(raw);
-                                                        })));
-                                                    });
-                                                }
-                                            });
-                                        });
-                                        ConfigEditor::space(ui, scale * 8.0);
+                                            if keybind_row(ui, t!("config_editor.menu_open_key"), key_label, t!("config_editor.menu_open_key_set")) {
+                                                let keybind_slot = self.pending_keybind.clone();
+                                                std::thread::spawn(move || {
+                                                    let Some(gui_mutex) = Gui::instance() else { return };
+                                                    let mut gui = gui_mutex.lock().unwrap_or_else(|e| e.into_inner());
+                                                    gui.show_window(Box::new(SetKeybindWindow::new(move |result| {
+                                                        let Some(raw) = result else { return };
+                                                        let hachimi = Hachimi::instance();
+                                                        let mut new_config = hachimi.config.load().as_ref().clone();
+                                                        #[cfg(target_os = "windows")]
+                                                        { new_config.windows.menu_open_key = raw; }
+                                                        #[cfg(target_os = "android")]
+                                                        { new_config.android.menu_open_key = raw; }
+                                                        save_and_reload_config(new_config);
+                                                        *keybind_slot.lock().unwrap() = Some(raw);
+                                                    })));
+                                                });
+                                            }
+                                            ConfigEditor::space(ui, scale * 8.0);
                                         } // end show_keybind
 
                                         // 3. Captions / Subtitles Toggle

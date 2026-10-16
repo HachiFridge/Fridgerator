@@ -56,7 +56,9 @@ impl AppWindow for SimpleMarkdownDialog {
             .open(&mut open)
             .show(ctx, |ui| {
                 egui::TopBottomPanel::bottom(self.id.with("bottom"))
+                    .frame(egui::Frame::NONE)
                     .show_inside(ui, |ui| {
+                        ui.add_space(4.0 * scale);
                         ui.with_layout(egui::Layout::right_to_left(egui::Align::Min), |ui| {
                             if ui.add(MaterialButton::filled(t!("ok"))).clicked() {
                                 open2 = false;
