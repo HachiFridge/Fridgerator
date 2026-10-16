@@ -2048,20 +2048,29 @@ impl Updater {
                                 Err(_) => { non_fatal_error_count_clone.fetch_add(1, atomic::Ordering::Relaxed); continue; }
                             };
 
+                            let entry_name = match zip_entry.name() {
+                                Ok(name) => name,
+                                Err(e) => {
+                                    warn!("Failed to decode ZIP entry name: {}", e);
+                                    non_fatal_error_count_clone.fetch_add(1, atomic::Ordering::Relaxed);
+                                    continue;
+                                }
+                            };
+
                             let repo_file = match Self::resolve_zip_entry_repo_file(
                                 &files_to_extract_clone,
-                                zip_entry.name(),
+                                &entry_name,
                                 &zip_dir_clone,
                             ) {
                                 Some(file) => file.clone(),
                                 None => {
-                                    debug!("ZIP entry not in mod files_to_extract list: {} (searching {} entries)", zip_entry.name(), files_to_extract_clone.len());
+                                    debug!("ZIP entry not in mod files_to_extract list: {} (searching {} entries)", entry_name, files_to_extract_clone.len());
                                     continue;
                                 }
                             };
 
                             let path = repo_file.get_fs_path(&localized_data_dir_clone);
-                            debug!("ZIP entry '{}' -> target '{}'", zip_entry.name(), path.display());
+                            debug!("ZIP entry '{}' -> target '{}'", entry_name, path.display());
 
                             // Prevent multiple threads from extracting the same target path concurrently
                             {
@@ -2511,9 +2520,18 @@ impl Updater {
                                 }
                             };
 
+                            let entry_name = match zip_entry.name() {
+                                Ok(name) => name,
+                                Err(e) => {
+                                    warn!("Failed to decode ZIP entry name: {}", e);
+                                    non_fatal_error_count_clone.fetch_add(1, atomic::Ordering::Relaxed);
+                                    continue;
+                                }
+                            };
+
                             let repo_file = match Self::resolve_zip_entry_repo_file(
                                 &files_to_extract_clone,
-                                zip_entry.name(),
+                                &entry_name,
                                 &zip_dir_clone,
                             ) {
                                 Some(file) => file.clone(),
@@ -2521,7 +2539,7 @@ impl Updater {
                             };
 
                             let path = repo_file.get_fs_path(&localized_data_dir_clone);
-                            debug!("ZIP entry '{}' -> target '{}'", zip_entry.name(), path.display());
+                            debug!("ZIP entry '{}' -> target '{}'", entry_name, path.display());
 
                             // Prevent multiple threads from extracting the same target path concurrently
                             {
